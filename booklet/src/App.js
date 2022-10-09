@@ -1,25 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import DemoTable from "./components/DemoTable";
+import DemoNav from "./components/DemoNav";
+import { AppBar, Button, useTheme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
-function App() {
+const useStyles = makeStyles({
+  root: {
+    height: "100vh"
+  }
+})
+
+export default function App() {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>
+      <DemoNav />
+      <DemoTable />
     </div>
   );
 }
-
-export default App;
