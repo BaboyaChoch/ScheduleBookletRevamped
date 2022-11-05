@@ -1,38 +1,55 @@
 import './App.css';
 import {useEffect, useState} from "react";
-import {Grid, useTheme} from "@mui/material";
+import {Divider, Grid, useTheme} from "@mui/material";
 import {makeStyles, styled} from "@mui/styles";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: 'white',
-    width: '100vw',
-    height: '100vh',
+    backgroundColor: '#F6F4F1',
   },
-  appBar: {
-    backgroundColor: 'purple',
-    height: '8vh',
+  navBar: {
+    backgroundColor: 'brown',
+    height: '5vh'
   },
-  options: {
-    backgroundColor: 'gray',
-    height: '7vh',
+  content: {
+    backgroundColor: '#F6F4F1',
+    height:'100vh',
   },
-  sideBar: {
-    backgroundColor: 'green',
-    height: '100vh',
+  search: {
+    backgroundColor: 'black',
   },
   main: {
-    backgroundColor: 'blue',
-    height: '100vh',
+  },
+  filters: {
+    backgroundColor: 'orange'
+  },
+  table: {
+    backgroundColor: 'grey'
+  },
+  schedule: {
+    width: 577,
+    height: 36,
+    backgroundColor: 'green',
+    position:'fixed',
+    bottom: 0,
+    right: 0
   }
 })
 
 const Label = ({children}) => {
-  return <Typography style={{display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}}>
-    {children}
-  </Typography>
+  return (
+    <Typography style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        width: '100vw'}}>
+      {children}
+    </Typography>
+  )
 }
 
 export default function App() {
@@ -50,21 +67,50 @@ export default function App() {
   }, [isDarkMode])
 
   return (
-    <>
-      <Grid className={classes.root} container spacing={2}>
-        <Grid className={classes.appBar} item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Label>APP BAR</Label>
+    <Box>
+      <Grid container className={classes.root} direction="column">
+        <Grid item className={classes.navBar}>
+          <Label>THIS IS THE NAV BAR</Label>
         </Grid>
-        <Grid className={classes.options} item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Label>QUERY OPTIONS</Label>
-        </Grid>
-        <Grid className={classes.sideBar} item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Label>FILTER SIDEBAR</Label>
-        </Grid>
-        <Grid className={classes.main} item xs={10} sm={10} md={10} lg={10} xl={10}>
-          <Label>INTERACTIVE TABLE</Label>
+        <Grid item container className={classes.content}>
+          <Grid item xs={1.25} />
+          <Grid item container direction="column" xs={9.5}>
+            <Grid item container xs={1} className={classes.search}>
+                <Label >
+                  SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
+                </Label>
+            </Grid>
+            <Grid item container xs={11} className={classes.main}>
+              <Grid  item container xs={2.25} className={classes.filters}>
+                <Label>
+                  FILTERING OPTIONS
+                </Label>
+              </Grid>
+              <Grid item xs={.25} display='flex' justifyContent='center'>
+                <Divider orientation="vertical" sx={{backgroundColor: '#E0E0E0'}}/>
+              </Grid>
+              <Grid item container xs={9.50} className={classes.table}>
+                <Label>
+                  INTERACTIVE TABLE
+                </Label>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={1.25} />
         </Grid>
       </Grid>
-    </>
+      <Box>
+        <div className={classes.schedule} >
+            <Typography sx={{
+              color: 'white',
+              display:'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              SCHEDULE MODAL
+            </Typography>
+        </div>
+      </Box>
+    </Box>
   );
 }
