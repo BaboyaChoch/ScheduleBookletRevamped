@@ -5,6 +5,7 @@ import {makeStyles, styled} from "@mui/styles";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import CoursesTable from "./components/CoursesTable";
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +28,6 @@ const useStyles = makeStyles({
     backgroundColor: 'orange'
   },
   table: {
-    backgroundColor: 'grey'
   },
   schedule: {
     width: 577,
@@ -91,22 +91,20 @@ export default function App() {
                 <Divider orientation="vertical" sx={{backgroundColor: '#E0E0E0'}}/>
               </Grid>
               <Grid item container xs={9.50} className={classes.table}>
-                <Label>
-                  INTERACTIVE TABLE
-                </Label>
+                <CoursesTable />
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={1.25} />
         </Grid>
       </Grid>
-      <Box>
-        <div className={classes.schedule} >
-          <Label>
-            SCHEDULE MODAL
-          </Label>
-        </div>
-      </Box>
+      {/*<Box>*/}
+      {/*  <div className={classes.schedule} >*/}
+      {/*    <Label>*/}
+      {/*      SCHEDULE MODAL*/}
+      {/*    </Label>*/}
+      {/*  </div>*/}
+      {/*</Box>*/}
     </Box>
   );
 }
