@@ -25,7 +25,7 @@ export function CoursesTablePaginationActions({ count, page, rowsPerPage, onPage
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5}}>
+    <Box sx={{ flexShrink: 0, ml: 7}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
