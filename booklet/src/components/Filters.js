@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, Divider } from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
 import React from "react";
+import CourseLevel from "./CourseLevel";
 
 // File Imports
 import CourseTime from "./CourseTime";
@@ -23,12 +24,13 @@ export default function Filters() {
     <Box className={classes.root} sx={{ flexGrow: 1 }}>
       <Stack direction={"column"}>
         <div className={classes.text}> Filters</div>
-        <Divider />
         {/* Course Time Component*/}
+        <Divider />
         <CourseTime />
         <Divider />
         {/* Course Level Component */}
-
+        <CourseLevel />
+        <Divider />
         {/* Availability Component */}
 
         {/* Course Days Component */}
