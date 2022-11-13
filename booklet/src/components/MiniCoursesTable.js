@@ -33,7 +33,7 @@ export default function MiniCoursesTable({ sx, rows, isLab = false }) {
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
-            <TableRow style={{}}>
+            <TableRow>
               {getHeaders.map((headerName, index) => (
                 <TableCell
                   key={index}

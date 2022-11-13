@@ -13,6 +13,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { CoursesTablePaginationActions } from "./CoursesTablePaginationActions";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
+import { DEFAULT_USER } from "../config/user";
 
 const useStyles = makeStyles({
   root: {},
@@ -89,6 +90,16 @@ export default function CoursesTable() {
         labDays: "F",
         labInstructor: "Brener N",
       },
+      moreInfo: {
+        prereqs:
+          "This is a test note This is a test prereq This is a test note This is a test prereqThis is a test note This is a " +
+          "test prereqThis is a test note This is a test prereqThis is a test note This is a test prereq",
+        notes:
+          "This is a test note This is a test note This is a test note This is a test note  This is a test note" +
+          " This is a test note This is a test note This is a test note This is a test note This is a test note ",
+        desc: null,
+        specialEnrollment: " CI-WRITTEN&SPOK",
+      },
     },
     {
       data: createData(
@@ -106,6 +117,16 @@ export default function CoursesTable() {
       ),
       isAdded: false,
       lab: null,
+      moreInfo: {
+        prereqs:
+          "This is a test note This is a test prereq This is a test note This is a test prereqThis is a test note This is a " +
+          "test prereqThis is a test note This is a test prereqThis is a test note This is a test prereq",
+        notes: null,
+        desc:
+          "This is a test note This is a test desc This is a test note This is a test desc This is a test note This " +
+          "is a test descThis is a test note This is a test desc",
+        specialEnrollment: "100% Web Based",
+      },
     },
     {
       data: createData(
@@ -127,6 +148,18 @@ export default function CoursesTable() {
         labDays: "M",
         labInstructor: "Donze D",
       },
+      moreInfo: {
+        prereqs:
+          "This is a test note This is a test prereq This is a test note This is a test prereqThis is a test note This is a " +
+          "test prereqThis is a test note This is a test prereqThis is a test note This is a test prereq",
+        notes:
+          "This is a test note This is a test note This is a test note This is a test note  This is a test note" +
+          " This is a test note This is a test note This is a test note This is a test note This is a test note ",
+        desc:
+          "This is a test note This is a test desc This is a test note This is a test desc This is a test note This " +
+          "is a test descThis is a test note This is a test desc",
+        specialEnrollment: "",
+      },
     },
     {
       data: createData(
@@ -147,6 +180,18 @@ export default function CoursesTable() {
         labTime: "4:30-0720PM",
         labDays: "TH",
         labInstructor: "Aymond P",
+      },
+      moreInfo: {
+        prereqs:
+          "This is a test note This is a test prereq This is a test note This is a test prereqThis is a test note This is a " +
+          "test prereqThis is a test note This is a test prereqThis is a test note This is a test prereq",
+        notes:
+          "This is a test note This is a test note This is a test note This is a test note  This is a test note" +
+          " This is a test note This is a test note This is a test note This is a test note This is a test note ",
+        desc:
+          "This is a test note This is a test desc This is a test note This is a test desc This is a test note This " +
+          "is a test descThis is a test note This is a test desc",
+        specialEnrollment: "",
       },
     },
   ];
@@ -212,8 +257,20 @@ export default function CoursesTable() {
     }
   };
   useEffect(() => {
-    console.log(filteredRows, filteredRows.length);
+    console.log(
+      "DEBUG FOR FITLERS IN COURSESTABLE.JS",
+      filteredRows,
+      filteredRows.length
+    );
   }, [filteredRows]);
+
+  const checkIsCourseAdded = (row) => {
+    for (const course of DEFAULT_USER.currentScheduledClasses) {
+      if (row.courseNum == course.courseNum && row.section == course.sectionNum)
+        return true;
+    }
+    return false;
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -228,7 +285,7 @@ export default function CoursesTable() {
               alignItems: "end",
             }}
           >
-            <Typography fontSize={12} fontWeight={700} color={"#674EA7"}>
+            <Typography fontSize={12} fontWeight={700} color="primary">
               {isFilterActive
                 ? `Results for “${searchKeyword}” (${filteredRows.length} Courses)`
                 : "Results for “Fall 2022 Computer Science” (150 Courses)"}
@@ -280,8 +337,9 @@ export default function CoursesTable() {
               <CoursesRow
                 key={`${row.data.courseNum}-${row.data.section}`}
                 row={row.data}
-                isAdded={row.isAdded}
+                isAdded={checkIsCourseAdded(row.data)}
                 labInfo={row.lab}
+                moreInfo={row.moreInfo}
               />
             ))}
             {/*Todo: Decide to remove or keep empty rows*/}

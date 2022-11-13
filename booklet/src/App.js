@@ -60,6 +60,7 @@ export default function App() {
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
+    console.log(theme);
   });
 
   useEffect(() => {

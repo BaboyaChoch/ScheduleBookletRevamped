@@ -5,9 +5,10 @@ import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
+import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -21,25 +22,26 @@ const useStyles = makeStyles({
     margin: 1,
     width: "100%",
   },
+  addClassModal: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  },
 });
 
-export default function CoursesRow({ row, isAdded, labInfo }) {
+export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-
-  const MORE_INFO = {
-    Prerequisites:
-      "This is a test note This is a test prereq This is a test note This is a test prereqThis is a test note This is a " +
-      "test prereqThis is a test note This is a test prereqThis is a test note This is a test prereq",
-    Notes:
-      "This is a test note This is a test note This is a test note This is a test note  This is a test note" +
-      " This is a test note This is a test note This is a test note This is a test note This is a test note ",
-    Description:
-      "This is a test note This is a test desc This is a test note This is a test desc This is a test note This " +
-      "is a test descThis is a test note This is a test desc",
-  };
+  const [openMoreInfo, setOpenMoreInfo] = useState(false);
+  const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
 
   const LabeledText = ({ label, info }) => {
+    label = moreInfoLabelMap[label];
     return (
       <Box
         sx={{
@@ -69,13 +71,29 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
               component="div"
               sx={{ fontSize: 10, fontWeight: 500 }}
             >
-              {`${info}`}
+              {info ? info : `No ${label} Available`}
             </Typography>
           </Grid>
           <Grid item xs={0.05} />
         </Grid>
       </Box>
     );
+  };
+
+  const handleAddLabNoticeModalOpen = () => setOpenAddLabNoticeModal(true);
+
+  const handleAddLabNoticeModalClose = () => setOpenAddLabNoticeModal(false);
+
+  // Todo: In the else statement, call function to add course to schedule modal
+  const handleOnAddClass = (isClickedFromModalOrMoreInfo = false) => {
+    if (!isClickedFromModalOrMoreInfo && labInfo) handleAddLabNoticeModalOpen();
+    else console.log("ADD CLASS WAS CLICKED", isClickedFromModalOrMoreInfo);
+  };
+
+  const moreInfoLabelMap = {
+    prereqs: "Prerequisites",
+    notes: "Notes",
+    desc: "Description",
   };
 
   return (
@@ -105,10 +123,10 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
                 variant="contained"
                 aria-label="expand row"
                 size="small"
-                onClick={() => setOpen(!open)}
+                onClick={() => setOpenMoreInfo(!openMoreInfo)}
                 color="info"
               >
-                {open ? "close" : "More Info"}
+                {openMoreInfo ? "close" : "More Info"}
               </Button>
             </Grid>
             <Grid item xs={1} />
@@ -119,9 +137,10 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
                 variant="contained"
                 aria-label="expand row"
                 size="small"
-                onClick={() => console.log("ADD_CLASS_WAS_CLICKED")}
+                onClick={() => handleOnAddClass()}
                 color="success"
-                disabled={isAdded}
+                disabled={isAdded || (openMoreInfo && labInfo)}
+                sx={{ color: "white" }}
               >
                 Add Class
               </Button>
@@ -131,31 +150,62 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={openMoreInfo} timeout="auto" unmountOnExit>
             <Box className={classes.moreInfoCont}>
               <Grid container direction="column">
                 <Grid item>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                    }}
-                  >
-                    <Typography
-                      gutterBottom
-                      component="div"
-                      sx={{ fontSize: 14, fontWeight: 700 }}
+                  <Box>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
                     >
-                      More Info&nbsp;
-                    </Typography>
-                    <Typography
-                      gutterBottom
-                      component="div"
-                      sx={{ fontSize: 10, color: "red" }}
-                    >
-                      {labInfo ? "This class has a lab" : ""}
-                    </Typography>
+                      <Typography
+                        gutterBottom
+                        component="div"
+                        sx={{ fontSize: 14, fontWeight: 700 }}
+                      >
+                        More Info&nbsp;
+                      </Typography>
+                      {labInfo ? (
+                        <Typography
+                          gutterBottom
+                          component="div"
+                          sx={{
+                            fontSize: 10,
+                            color: "red",
+                            border: "1px solid red",
+                            p: 0.2,
+                          }}
+                        >
+                          This class has a lab
+                        </Typography>
+                      ) : (
+                        ""
+                      )}
+                      {moreInfo.specialEnrollment ? (
+                        <Typography
+                          gutterBottom
+                          component="div"
+                          sx={{
+                            fontSize: 10,
+                            color: "red",
+                            border: "1px solid red",
+                            p: 0.2,
+                          }}
+                        >
+                          {moreInfo.specialEnrollment
+                            ? moreInfo.specialEnrollment
+                            : ""}
+                        </Typography>
+                      ) : (
+                        ""
+                      )}
+                    </Stack>
                   </Box>
                 </Grid>
                 <Grid item container direction="row">
@@ -187,11 +237,15 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
                     direction="column"
                     xs={labInfo ? 8.4 : 11.9}
                   >
-                    {Object.entries(MORE_INFO).map(([label, info], index) => (
-                      <Grid item>
-                        <LabeledText label={label} info={info} />
-                      </Grid>
-                    ))}
+                    {Object.entries(moreInfo).map(([label, info], index) => {
+                      if (label != "specialEnrollment") {
+                        return (
+                          <Grid key={index} item>
+                            <LabeledText label={label} info={info} />
+                          </Grid>
+                        );
+                      }
+                    })}
                   </Grid>
                 </Grid>
                 <Grid item sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -200,9 +254,7 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
                       variant="contained"
                       aria-label="expand row"
                       size="small"
-                      onClick={() =>
-                        console.log("A CLASS WITH A LAB HAS BEEN ADDED")
-                      }
+                      onClick={() => handleOnAddClass(true)}
                       color="success"
                       disabled={isAdded}
                       sx={{
@@ -210,6 +262,7 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
                         width: "fit-content",
                         fontSize: "8px !important",
                         fontWeight: "700 !important",
+                        color: "white",
                       }}
                     >
                       Add Full Course
@@ -223,6 +276,23 @@ export default function CoursesRow({ row, isAdded, labInfo }) {
           </Collapse>
         </TableCell>
       </TableRow>
+      {labInfo ? (
+        <AlertAddClassWithLabModal
+          rows={[
+            [
+              row.courseNum,
+              labInfo.labTime,
+              labInfo.labDays,
+              labInfo.labInstructor,
+            ],
+          ]}
+          open={openAddLabNoticeModal}
+          onClose={() => handleAddLabNoticeModalClose()}
+          onAddClass={() => handleOnAddClass(true)}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
@@ -241,12 +311,5 @@ CoursesRow.propTypes = {
     building: PropTypes.string.isRequired,
     instructor: PropTypes.string.isRequired,
     isAdded: PropTypes.bool,
-    moreInfo: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
   }).isRequired,
 };
