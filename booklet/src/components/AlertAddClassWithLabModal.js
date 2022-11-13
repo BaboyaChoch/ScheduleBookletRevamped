@@ -138,7 +138,7 @@ export default function AlertAddClassWithLabModal({
                     Add Class
                   </Button>
                 </Grid>
-                <Grid xs={0.2} />
+                <Grid item xs={0.2} />
                 <Grid item>
                   <Button
                     className={classes.modalActionsButtons}

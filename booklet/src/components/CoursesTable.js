@@ -14,6 +14,8 @@ import { CoursesTablePaginationActions } from "./CoursesTablePaginationActions";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { DEFAULT_USER } from "../config/user";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const useStyles = makeStyles({
   root: {},
@@ -22,10 +24,14 @@ const useStyles = makeStyles({
 export default function CoursesTable() {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const [order, setOrder] = useState(undefined);
+  const [orderBy, setOrderBy] = useState(undefined);
   const [rowsPerPage, setRowsPerPage] = useState(2);
   const [searchKeyword, setSearchKeyword] = useState(undefined);
   const [filteredRows, setFilteredRows] = useState([]);
   const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
+  const [isHeaderSortActive, setIsHeaderSortActive] = useState(false)
+  const [selectedHeader, setSelectedHeader] = useState('availability')
 
   const createData = (
     availability,
@@ -215,7 +221,7 @@ export default function CoursesTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const isFilterActive = isSearchFilterActive;
+  const isFilterActive = isSearchFilterActive || isHeaderSortActive;
 
   const getRows = isFilterActive ? filteredRows : rows;
 
@@ -232,8 +238,17 @@ export default function CoursesTable() {
     setSearchKeyword(event.target.value);
   };
 
+  const getRowsToFilter =  () => {
+    return (isFilterActive && filteredRows && filteredRows.length > 0) ? filteredRows : rows;
+  }
+
   const lazyFilterRowsByKeyWord = (keyWord) => {
     keyWord = keyWord.toLowerCase();
+
+    if (keyWord.length ===  0 || keyWord === '') {
+      setFilteredRows([]);
+      setIsSearchFilterActive(false);
+    }
 
     const newRows = rows.filter((row, index) => {
       for (const [key, value] of Object.entries(row.data)) {
@@ -242,6 +257,8 @@ export default function CoursesTable() {
       }
       return false;
     });
+
+
     setFilteredRows(newRows);
     setIsSearchFilterActive(true);
   };
@@ -256,13 +273,25 @@ export default function CoursesTable() {
       }
     }
   };
-  useEffect(() => {
-    console.log(
-      "DEBUG FOR FITLERS IN COURSESTABLE.JS",
-      filteredRows,
-      filteredRows.length
-    );
-  }, [filteredRows]);
+
+  const descendingComparator = (a, b, orderBy) => {
+    if (b.data[orderBy] < a.data[orderBy]) {
+      return -1;
+    }
+    if (b.data[orderBy] > a.data[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  const getComparator = (order, orderBy) => {
+    if (order === 'desc') {
+      return (a, b) => descendingComparator(a, b, orderBy)
+    }
+    else if (order === 'asc') {
+      return (a, b) => -descendingComparator(a, b, orderBy)
+    }
+  }
 
   const checkIsCourseAdded = (row) => {
     for (const course of DEFAULT_USER.currentScheduledClasses) {
@@ -271,6 +300,53 @@ export default function CoursesTable() {
     }
     return false;
   };
+
+  // Todo: Filtering after using table search should go back to the initial table search results order
+  const handleOnHeaderClick = (event, headerName)  => {
+    headerName = headerName.toLowerCase()
+    let newRows;
+
+    if (selectedHeader != headerName || order === undefined) {
+      setOrder('desc')
+      newRows = getRowsToFilter().sort(getComparator('desc', headerName));
+    }
+    else if (order === 'desc') {
+      setOrder('asc')
+      newRows = getRowsToFilter().sort(getComparator('asc', headerName));
+    }
+    else if ( order === 'asc') {
+      setSelectedHeader(headerName);
+      setOrderBy(undefined);
+      setOrder(undefined)
+
+      setIsHeaderSortActive(false);
+      if (!isSearchFilterActive) setFilteredRows([]);
+
+      return;
+    }
+
+    setSelectedHeader(headerName);
+    setOrderBy(headerName);
+    setFilteredRows(newRows);
+    setIsHeaderSortActive(true);
+  }
+
+  const showHeaderSortDirection = () => {
+    if (order === undefined)
+      return (<ArrowUpwardIcon sx={{fontSize: 15, color: "#C5C5C5", marginTop: .7}}/>)
+    else if (order === 'desc')
+      return (<ArrowDownwardIcon sx={{fontSize: 15, marginTop: .7}}/>)
+    else if (order === 'asc')
+      return (<ArrowUpwardIcon sx={{fontSize: 15, marginTop: .7}}/>)
+  }
+
+  useEffect(() => {
+    console.log(
+        "DEBUG FOR FITLERS IN COURSESTABLE.JS",
+        filteredRows,
+        filteredRows.length
+    );
+  }, [filteredRows]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -286,7 +362,7 @@ export default function CoursesTable() {
             }}
           >
             <Typography fontSize={12} fontWeight={700} color="primary">
-              {isFilterActive
+              {isFilterActive && isSearchFilterActive
                 ? `Results for “${searchKeyword}” (${filteredRows.length} Courses)`
                 : "Results for “Fall 2022 Computer Science” (150 Courses)"}
             </Typography>
@@ -319,9 +395,20 @@ export default function CoursesTable() {
                 <TableCell
                   key={index}
                   align="center"
-                  sx={{ fontSize: 10, fontWeight: 700 }}
+                  onClick={(event) => handleOnHeaderClick(event, headerName)}
                 >
-                  {headerName}
+                  <Grid  sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Grid item >
+                      <Typography sx={{ fontSize: 10, fontWeight: 700 }}>
+                        {headerName}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={3} direction='column' sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      <Grid item>
+                        {selectedHeader == headerName.toLowerCase() ? showHeaderSortDirection(headerName) : ''}
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </TableCell>
               ))}
             </TableRow>
