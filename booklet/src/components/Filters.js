@@ -5,6 +5,7 @@ import CourseLevel from "./CourseLevel";
 
 // File Imports
 import CourseTime from "./CourseTime";
+import Availability from "./Availibility";
 
 const useStyles = makeStyles({
   root: {},
@@ -32,7 +33,7 @@ export default function Filters() {
         <CourseLevel />
         <Divider />
         {/* Availability Component */}
-
+        <Availability />
         {/* Course Days Component */}
 
         {/* Credit Hours Component */}

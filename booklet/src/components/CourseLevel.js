@@ -8,6 +8,7 @@ import {
   FormGroup,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { Stack } from "@mui/system";
 
 const useStyles = makeStyles({
   container: {
@@ -50,10 +51,18 @@ export default function CourseLevel() {
         <Typography sx={{ color: "#674EA7" }}> Course Level</Typography>
       </Grid>
       {/* Body - checklist */}
-      <Grid item xs={1}>
-        {courseLevelList.map((level) => {
-          return <FormControlLabel control={<Checkbox />} label={level} />;
-        })}
+      <Grid
+        item
+        xs={1}
+        sx={{
+          flexWrap: "nowrap",
+        }}
+      >
+        <Stack>
+          {courseLevelList.map((level) => {
+            return <FormControlLabel control={<Checkbox />} label={level} />;
+          })}
+        </Stack>
       </Grid>
     </Grid>
   );
