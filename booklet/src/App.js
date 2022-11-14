@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { Divider, Grid, useTheme } from "@mui/material";
+import { Divider, Grid, useTheme, Container } from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -11,23 +11,22 @@ import Filters from "./components/Filters";
 
 const useStyles = makeStyles({
   root: {
+    height: "100%",
+    flexGrow: 1,
     backgroundColor: "#F6F4F1",
   },
   navBar: {
     backgroundColor: "brown",
-    height: "5vh",
   },
   content: {
     flexGrow: 1,
-    backgroundColor: "#F6F4F1",
-    height: "100vh",
+    height: "100%",
+    overflow: "auto",
   },
   search: {
     backgroundColor: "black",
   },
-  main: {
-    border: "1px solid green",
-  },
+  main: {},
   filters: {
     border: " 1px solid green",
   },
@@ -78,49 +77,57 @@ export default function App() {
   }, [isDarkMode]);
 
   return (
-    <Box>
+    <>
       <Grid container className={classes.root} direction="column">
         <Grid item className={classes.navBar}>
           <Label>THIS IS THE NAV BAR</Label>
         </Grid>
-        <Grid item container className={classes.content} direction="row">
-          <Grid item xs={1.25} />
-          <Grid item container direction="column" xs={9.5}>
-            <Grid item container xs={1} className={classes.search}>
-              <Label>
-                SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
-              </Label>
+
+        <Container disableGutters={false}>
+          <Grid
+            container
+            className={classes.content}
+            direction="column"
+            alignItems="stretch"
+          >
+            <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
+            <Grid item container direction="column" xs={9.5}>
+              <Grid item container xs={1} className={classes.search}>
+                <Label>
+                  SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
+                </Label>
+              </Grid>
+              <Grid
+                item
+                container
+                wrap="nowrap"
+                sx={{ height: "80%" }}
+                xs={11}
+                className={classes.main}
+              >
+                <Grid item xs={2.25} className={classes.filters}>
+                  <Filters />
+                </Grid>
+                <Grid item xs={0.25} display="flex" justifyContent="center">
+                  <Divider
+                    orientation="vertical"
+                    sx={{ backgroundColor: "#E0E0E0" }}
+                  />
+                </Grid>
+                <Grid item container xs={9.5} className={classes.table}>
+                  <Label>INTERACTIVE TABLE</Label>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid
-              item
-              container
-              wrap="nowrap"
-              sx={{ overflow: "auto" }}
-              xs={11}
-              className={classes.main}
-            >
-              <Grid item xs={2.25} className={classes.filters}>
-                <Filters />
-              </Grid>
-              <Grid item xs={0.25} display="flex" justifyContent="center">
-                <Divider
-                  orientation="vertical"
-                  sx={{ backgroundColor: "#E0E0E0" }}
-                />
-              </Grid>
-              <Grid item container xs={9.5} className={classes.table}>
-                <Label>INTERACTIVE TABLE</Label>
-              </Grid>
-            </Grid>
+            <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
           </Grid>
-          <Grid item xs={1.25} />
-        </Grid>
+        </Container>
       </Grid>
-      <Box>
+      {/* <Box>
         <div className={classes.schedule}>
           <Label>SCHEDULE MODAL</Label>
         </div>
-      </Box>
-    </Box>
+      </Box> */}
+    </>
   );
 }
