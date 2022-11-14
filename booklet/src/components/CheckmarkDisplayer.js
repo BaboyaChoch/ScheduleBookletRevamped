@@ -32,15 +32,8 @@ function valueText(value) {
   return `${value}°C`;
 }
 
-const courseLevelList = [
-  "1000 Level",
-  "2000 Level",
-  "3000 Level",
-  "4000 Level",
-  "5000+ Level",
-];
-
-export default function CourseLevel() {
+export default function CheckmarkDisplayer(props) {
+  const { headerText, itemList } = props;
   const classes = useStyles();
   const [courseLevel, setCourseLevel] = useState(0);
 
@@ -48,21 +41,25 @@ export default function CourseLevel() {
     <Grid container direction="column" spacing={1}>
       {/* Title - Course Level */}
       <Grid item xs>
-        <Typography sx={{ color: "#674EA7" }}> Course Level</Typography>
+        <Typography sx={{ color: "#674EA7" }}> {headerText}</Typography>
       </Grid>
       {/* Body - checklist */}
       <Grid
         item
-        xs={1}
         sx={{
           flexWrap: "nowrap",
         }}
       >
-        <Stack>
-          {courseLevelList.map((level) => {
-            return <FormControlLabel control={<Checkbox />} label={level} />;
-          })}
-        </Stack>
+        {itemList.map((item) => {
+          return (
+            <FormControlLabel
+              spacing={1}
+              key={item.id}
+              control={<Checkbox />}
+              label={item.label}
+            />
+          );
+        })}
       </Grid>
     </Grid>
   );

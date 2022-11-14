@@ -22,10 +22,7 @@ export default function Availability() {
         <Typography sx={{ color: "#674EA7" }}> Availability </Typography>
       </Grid>
       <Grid item>
-        <RadioGroup
-          aria-aria-labelledby="Availability options"
-          defaultValue="allCourses"
-        >
+        <RadioGroup defaultValue="allCourses">
           {availabilityOptions.map((element) => {
             return (
               <FormControlLabel
@@ -33,7 +30,6 @@ export default function Availability() {
                 control={<Radio />}
                 label={element.label}
               />
-              
             );
           })}
         </RadioGroup>
