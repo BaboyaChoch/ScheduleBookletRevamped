@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Collapse from "@mui/material/Collapse";
@@ -9,6 +9,9 @@ import { Button, Grid, Stack } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
 import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from "@mui/material/Tooltip";
+import {DEFAULT_USER} from "../config/user";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -39,9 +42,11 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
   const classes = useStyles();
   const [openMoreInfo, setOpenMoreInfo] = useState(false);
   const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
+  const [courseNotAddableReason, setCourseNotAddableReason] = useState(undefined);
+  const [isNotAddable, setIsNotAddable] = useState(true)
 
   const LabeledText = ({ label, info }) => {
-    label = moreInfoLabelMap[label];
+    label = MORE_INFO_LABEL_MAP[label];
     return (
       <Box
         sx={{
@@ -90,11 +95,42 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
     else console.log("ADD CLASS WAS CLICKED", isClickedFromModalOrMoreInfo);
   };
 
-  const moreInfoLabelMap = {
+  const MORE_INFO_LABEL_MAP = {
     prereqs: "Prerequisites",
     notes: "Notes",
     desc: "Description",
   };
+
+  const CLASS_NOT_ADDABLE_REASONS_MAP =  {
+    ALREADY_ADDED : 'You have already added and or scheduled this course',
+    NOT_PART_OF_MAJOR : 'Major does not match. You must be a major to take add this course',
+    NOT_PART_OF_RES_HALL : 'Residental hall does not match. You must reside in the listed residental hall to add this course',
+  }
+
+  const getCourseCannotAddReason = () => {
+    return "RANDOM CANNOT ADD REASON"
+  }
+
+  useEffect( () => {
+    const courseDepartment = row.courseNum.split(' ')[0]
+
+    if (isAdded) {
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED)
+      setIsNotAddable(true)
+    }
+    else if (!DEFAULT_USER.majorDepartments.includes(courseDepartment)) {
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_MAJOR)
+      setIsNotAddable(true)
+    }
+    else if (false) { // Todo: check if course is restricted by a res hall and check if the stundet's res hall is part of the list if it is
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_RES_HALL)
+      setIsNotAddable(true)
+    }
+    else {
+      setIsNotAddable(false)
+    }
+
+  }, [])
 
   return (
     <>
@@ -130,20 +166,26 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
               </Button>
             </Grid>
             <Grid item xs={1} />
-            <Grid item xs={5.5}>
+            <Grid item container xs={5.5} direction='row' flexWrap='nowrap'  >
               {/*Todo: Clearly communciate reason (text or icon) for class being unaddable instead of just disabling*/}
-              <Button
-                className={classes.actionButtons}
-                variant="contained"
-                aria-label="expand row"
-                size="small"
-                onClick={() => handleOnAddClass()}
-                color="success"
-                disabled={isAdded || (openMoreInfo && labInfo)}
-                sx={{ color: "white" }}
-              >
-                Add Class
-              </Button>
+              <Grid item>
+                <Button
+                    className={classes.actionButtons}
+                    variant="contained"
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => handleOnAddClass()}
+                    color="success"
+                    disabled={isNotAddable || (openMoreInfo && labInfo)}
+                    sx={{ color: "white" }}
+                >
+                  Add Class
+                </Button>
+              </Grid>
+              {/*Todo: Possibly consider how we notify the user the reason a course may not be addable */}
+              <Grid item sx={{display: 'flex', alignItems: 'center'}}>
+                {isNotAddable ? <Tooltip title={courseNotAddableReason}><InfoIcon sx={{fontSize: 15, color: 'red'}} /></Tooltip> : ''}
+              </Grid>
             </Grid>
           </Grid>
         </TableCell>

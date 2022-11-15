@@ -14,6 +14,9 @@ export const theme = createTheme({
     success: {
       main: "#66BB6A",
     },
+    error: {
+      main: '#d32f2f'
+    }
   },
   typography: {
     fontFamily: font,

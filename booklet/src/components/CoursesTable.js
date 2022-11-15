@@ -403,7 +403,7 @@ export default function CoursesTable() {
                         {headerName}
                       </Typography>
                     </Grid>
-                    <Grid item xs={3} direction='column' sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Grid item xs={3} sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
                       <Grid item>
                         {selectedHeader == headerName.toLowerCase() ? showHeaderSortDirection(headerName) : ''}
                       </Grid>
