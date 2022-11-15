@@ -73,7 +73,7 @@ export default function App() {
 
   return (
     <Box>
-      <Grid container className={classes.root} direction="column">
+      <Grid container className={classes.root} direction="column" spacing={2}>
         <Grid item className={classes.navBar}>
           <Label>THIS IS THE NAV BAR</Label>
         </Grid>

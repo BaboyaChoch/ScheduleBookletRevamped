@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     backgroundColor: "#f6f4f1",
   },
 });
+
 export default function MiniCoursesTable({ sx, rows, isLab = false }) {
   const classes = useStyles();
   const LAB_TABLE_HEADERS = ["Class", "Time", "Days", "Instructor"];
