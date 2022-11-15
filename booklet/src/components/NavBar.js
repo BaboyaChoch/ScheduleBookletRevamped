@@ -9,8 +9,8 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles({
     root: {},
     logo:{
-        height: 60,
-        paddingTop: 3
+        height: 55,
+        paddingBottom:20
     }
 })
 
@@ -18,18 +18,9 @@ export default function DemoNav() {
     const classes = useStyles();
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
                     <div sx={{flexGrow: 1}}>
                         <img src="https://logos-world.net/wp-content/uploads/2021/09/Louisiana-State-University-LSU-Emblem.png" className={classes.logo}/>
                     </div>

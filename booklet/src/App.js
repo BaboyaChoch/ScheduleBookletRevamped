@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
+import NavBar from './components/NavBar';
+
 const useStyles = makeStyles({
   root: {
     backgroundColor: '#F6F4F1',
@@ -71,7 +73,7 @@ export default function App() {
     <Box>
       <Grid container className={classes.root} direction="column">
         <Grid item className={classes.navBar}>
-          <Label>THIS IS THE NAV BAR</Label>
+          <NavBar/>
         </Grid>
         <Grid item container className={classes.content}>
           <Grid item xs={1.25} />
