@@ -44,20 +44,17 @@ export default function CheckmarkDisplayer(props) {
         <Typography sx={{ color: "#674EA7" }}> {headerText}</Typography>
       </Grid>
       {/* Body - checklist */}
-      <Grid
-        item
-        sx={{
-          flexWrap: "nowrap",
-        }}
-      >
+      <Grid item container>
         {itemList.map((item) => {
           return (
-            <FormControlLabel
-              spacing={1}
-              key={item.id}
-              control={<Checkbox />}
-              label={item.label}
-            />
+            <Grid item>
+              <FormControlLabel
+                spacing={1}
+                key={item.id}
+                control={<Checkbox />}
+                label={item.label}
+              />
+            </Grid>
           );
         })}
       </Grid>

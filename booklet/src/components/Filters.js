@@ -1,4 +1,11 @@
-import { Box, Stack, Typography, Divider } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Divider,
+  Button,
+  Container,
+} from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
 import React from "react";
 
@@ -17,8 +24,7 @@ const useStyles = makeStyles({
     paddingTop: 3,
   },
   filterStack: {
-    maxHeight: 100,
-    overflow: "overflow",
+    paddingLeft: 5,
   },
 });
 
@@ -51,8 +57,12 @@ export default function Filters(props) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root} xs>
-      <Stack direction={"column"} sx={{ overflow: "auto" }}>
+    <Box className={classes.root} xs={12}>
+      <Stack
+        className={classes.filterStack}
+        direction="column"
+        sx={{ overflow: "auto" }}
+      >
         <div className={classes.filterStack}> Filters</div>
         {/* Course Time Component*/}
         <Divider />
@@ -61,10 +71,13 @@ export default function Filters(props) {
         </div>
         <Divider />
         {/* Course Level through the checkmarkDisp. componenet */}
-        <CheckmarkDisplayer
-          headerText="Course Level"
-          itemList={courseLevelList}
-        />
+        <div>
+          <CheckmarkDisplayer
+            headerText="Course Level"
+            itemList={courseLevelList}
+          />
+        </div>
+
         <Divider />
         {/* Availability Component */}
         <Availability />
@@ -77,6 +90,19 @@ export default function Filters(props) {
           headerText="Credit Hours"
           itemList={credtHourList}
         />
+        <Divider />
+        <Box sx={{ paddingTop: 2, alignSelf: "center" }}>
+          <Button
+            size="small"
+            sx={{ width: "100%" }}
+            variant="contained"
+            onClick={() => {
+              return alert("submit filters");
+            }}
+          >
+            Apply Filters
+          </Button>
+        </Box>
       </Stack>
     </Box>
   );
