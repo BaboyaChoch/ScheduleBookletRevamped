@@ -19,6 +19,9 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const useStyles = makeStyles({
   root: {},
+  tableSearchInput: {
+    borderRadius: "11px !important",
+  },
 });
 
 export default function CoursesTable() {
@@ -461,14 +464,20 @@ export default function CoursesTable() {
             xs={3}
             sx={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <TextField
-              label="Search Table"
-              id="outlined-size-small"
-              size="small"
-              value={searchKeyword}
-              onChange={handleSearchKeyWord}
-              onKeyPress={handleOnSearchEnter}
-            />
+            <Box boxShadow={1} sx={{ borderRadius: 3 }}>
+              <TextField
+                label="Search Table"
+                id="outlined-size-small"
+                size="small"
+                value={searchKeyword}
+                onChange={handleSearchKeyWord}
+                onKeyPress={handleOnSearchEnter}
+                sx={{ borderRadius: 3 }}
+                InputProps={{
+                  className: classes.tableSearchInput,
+                }}
+              />
+            </Box>
           </Grid>
         </Grid>
       </Box>
