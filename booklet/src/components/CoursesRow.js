@@ -1,18 +1,18 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { Button, Grid, Stack } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { Button, Grid, Stack, useMediaQuery } from "@mui/material";
+import { makeStyles, useTheme } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
 import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
-import InfoIcon from '@mui/icons-material/Info';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import InfoIcon from "@mui/icons-material/Info";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Tooltip from "@mui/material/Tooltip";
-import {DEFAULT_USER} from "../config/user";
+import { DEFAULT_USER } from "../config/user";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -37,14 +37,27 @@ const useStyles = makeStyles({
     boxShadow: 24,
     p: 4,
   },
+  center: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    border: "1px solid red",
+  },
 });
 
 export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
-  const classes = useStyles();
   const [openMoreInfo, setOpenMoreInfo] = useState(false);
   const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
-  const [courseNotAddableReason, setCourseNotAddableReason] = useState(undefined);
-  const [isNotAddable, setIsNotAddable] = useState(true)
+  const [courseNotAddableReason, setCourseNotAddableReason] =
+    useState(undefined);
+  const [isNotAddable, setIsNotAddable] = useState(true);
+
+  const classes = useStyles();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
+  const isMajorsOnly =
+    moreInfo.isMajorsOnly === true ||
+    row.courseName.toUpperCase().includes("MJRS");
 
   const LabeledText = ({ label, info }) => {
     label = MORE_INFO_LABEL_MAP[label];
@@ -56,7 +69,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
           justifyContent: "flex-start",
         }}
       >
-        <Grid container>
+        <Grid container direction={isSmallScreen ? "column" : "row"}>
           <Grid item xs={1}>
             <Typography
               gutterBottom
@@ -102,42 +115,44 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
     desc: "Description",
   };
 
-  const CLASS_NOT_ADDABLE_REASONS_MAP =  {
-    ALREADY_ADDED : 'You have already added and or scheduled this course',
-    NOT_PART_OF_MAJOR : 'Major does not match. You must be a major to take add this course',
-    NOT_PART_OF_RES_HALL : 'Residental hall does not match. You must reside in the listed residental hall to add this course',
-  }
-
-  const getCourseCannotAddReason = () => {
-    return "RANDOM CANNOT ADD REASON"
-  }
+  const CLASS_NOT_ADDABLE_REASONS_MAP = {
+    ALREADY_ADDED: "You have already added and or scheduled this course",
+    NOT_PART_OF_MAJOR:
+      "Major does not match. You must be a major to take add this course",
+    NOT_PART_OF_RES_HALL:
+      "Residental hall does not match. You must reside in the listed residental hall to add this course",
+  };
 
   const getNotAddableToolTipIcon = () => {
     if (courseNotAddableReason === CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED)
-      return (<CheckCircleIcon sx={{fontSize: 15, color: '#66BB6A'}} />)
-    else return (<InfoIcon sx={{fontSize: 15, color: 'red'}} />)
-  }
+      return <CheckCircleIcon sx={{ fontSize: 15, color: "#66BB6A" }} />;
+    else return <InfoIcon sx={{ fontSize: 15, color: "red" }} />;
+  };
 
-  useEffect( () => {
-    const courseDepartment = row.courseNum.split(' ')[0]
+  useEffect(() => {
+    const courseDepartment = row.courseNum.split(" ")[0];
 
     if (isAdded) {
-      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED)
-      setIsNotAddable(true)
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
+      setIsNotAddable(true);
+    } else if (
+      moreInfo.specialEnrollment == "MAJORS ONLY" &&
+      !DEFAULT_USER.majorDepartments.includes(courseDepartment)
+    ) {
+      setCourseNotAddableReason(
+        CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_MAJOR
+      );
+      setIsNotAddable(true);
+    } else if (false) {
+      // Todo: check if course is restricted by a res hall and check if the stundet's res hall is part of the list if it is
+      setCourseNotAddableReason(
+        CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_RES_HALL
+      );
+      setIsNotAddable(true);
+    } else {
+      setIsNotAddable(false);
     }
-    else if (!DEFAULT_USER.majorDepartments.includes(courseDepartment)) {
-      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_MAJOR)
-      setIsNotAddable(true)
-    }
-    else if (false) { // Todo: check if course is restricted by a res hall and check if the stundet's res hall is part of the list if it is
-      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_RES_HALL)
-      setIsNotAddable(true)
-    }
-    else {
-      setIsNotAddable(false)
-    }
-
-  }, [])
+  }, []);
 
   return (
     <>
@@ -159,38 +174,64 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
           }
         })}
         <TableCell className={classes.rowCell} align="center">
-          <Grid container direction="row">
-            <Grid item xs={5.5}>
-              <Button
-                className={classes.actionButtons}
-                variant="contained"
-                aria-label="expand row"
-                size="small"
-                onClick={() => setOpenMoreInfo(!openMoreInfo)}
-                color="info"
-              >
-                {openMoreInfo ? "close" : "More Info"}
-              </Button>
+          <Grid container direction={isSmallScreen ? "column" : "row"}>
+            <Grid
+              item
+              xs={5.5}
+              xl={5.5}
+              className={isSmallScreen ? classes.center : ""}
+            >
+              <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                <Button
+                  className={classes.actionButtons}
+                  variant="contained"
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpenMoreInfo(!openMoreInfo)}
+                  color="info"
+                >
+                  {openMoreInfo ? "close" : "More Info"}
+                </Button>
+              </Box>
             </Grid>
             <Grid item xs={1} />
-            <Grid item container xs={5.5} direction='row' flexWrap='nowrap'  >
+            <Grid
+              className={isSmallScreen ? classes.center : ""}
+              item
+              container
+              xs={5.5}
+              xl={5.5}
+              direction="row"
+              flexWrap="nowrap"
+            >
               <Grid item>
-                <Button
-                    className={classes.actionButtons}
-                    variant="contained"
-                    aria-label="expand row"
-                    size="small"
-                    onClick={() => handleOnAddClass()}
-                    color="success"
-                    disabled={isNotAddable || (openMoreInfo && labInfo)}
-                    sx={{ color: "white" }}
-                >
-                  Add Class
-                </Button>
+                {isSmallScreen && isNotAddable ? (
+                  ""
+                ) : (
+                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                    <Button
+                      className={classes.actionButtons}
+                      variant="contained"
+                      aria-label="expand row"
+                      size="small"
+                      onClick={() => handleOnAddClass()}
+                      color="success"
+                      disabled={isNotAddable || (openMoreInfo && labInfo)}
+                      sx={{ color: "white" }}
+                    >
+                      Add Class
+                    </Button>
+                  </Box>
+                )}
               </Grid>
-              {/*Todo: Possibly consider how we notify the user the reason a course may not be addable */}
-              <Grid item sx={{display: 'flex', alignItems: 'center'}}>
-                {isNotAddable ? <Tooltip title={courseNotAddableReason}>{getNotAddableToolTipIcon()}</Tooltip> : ''}
+              <Grid item sx={{ display: "flex", alignItems: "center" }}>
+                {isNotAddable ? (
+                  <Tooltip title={courseNotAddableReason}>
+                    {getNotAddableToolTipIcon()}
+                  </Tooltip>
+                ) : (
+                  ""
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -230,7 +271,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                             p: 0.2,
                           }}
                         >
-                          This class has a lab
+                          This Class Has a Lab
                         </Typography>
                       ) : (
                         ""
@@ -249,6 +290,22 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                           {moreInfo.specialEnrollment
                             ? moreInfo.specialEnrollment
                             : ""}
+                        </Typography>
+                      ) : (
+                        ""
+                      )}
+                      {isMajorsOnly ? (
+                        <Typography
+                          gutterBottom
+                          component="div"
+                          sx={{
+                            fontSize: 10,
+                            color: "red",
+                            border: "1px solid red",
+                            p: 0.2,
+                          }}
+                        >
+                          Majors Only
                         </Typography>
                       ) : (
                         ""
@@ -298,23 +355,25 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                 </Grid>
                 <Grid item sx={{ display: "flex", justifyContent: "flex-end" }}>
                   {labInfo ? (
-                    <Button
-                      variant="contained"
-                      aria-label="expand row"
-                      size="small"
-                      onClick={() => handleOnAddClass(true)}
-                      color="success"
-                      disabled={isAdded}
-                      sx={{
-                        borderRadius: "15px !important",
-                        width: "fit-content",
-                        fontSize: "8px !important",
-                        fontWeight: "700 !important",
-                        color: "white",
-                      }}
-                    >
-                      Add Full Course
-                    </Button>
+                    <Box boxShadow={1} sx={{ borderRadius: 15, m: 1 }}>
+                      <Button
+                        variant="contained"
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => handleOnAddClass(true)}
+                        color="success"
+                        disabled={isAdded}
+                        sx={{
+                          borderRadius: "15px !important",
+                          width: "fit-content",
+                          fontSize: "8px !important",
+                          fontWeight: "700 !important",
+                          color: "white",
+                        }}
+                      >
+                        Add Full Course
+                      </Button>
+                    </Box>
                   ) : (
                     ""
                   )}

@@ -126,30 +126,34 @@ export default function AlertAddClassWithLabModal({
                 sx={{ paddingBottom: 1 }}
               >
                 <Grid item>
-                  <Button
-                    className={classes.modalActionsButtons}
-                    variant="contained"
-                    aria-label="expand row"
-                    size="small"
-                    onClick={() => handleOnAddClass()}
-                    color="success"
-                    sx={{ color: "white" }}
-                  >
-                    Add Class
-                  </Button>
+                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                    <Button
+                      className={classes.modalActionsButtons}
+                      variant="contained"
+                      aria-label="expand row"
+                      size="small"
+                      onClick={() => handleOnAddClass()}
+                      color="success"
+                      sx={{ color: "white" }}
+                    >
+                      Add Class
+                    </Button>
+                  </Box>
                 </Grid>
                 <Grid item xs={0.2} />
                 <Grid item>
-                  <Button
-                    className={classes.modalActionsButtons}
-                    variant="contained"
-                    aria-label="expand row"
-                    size="small"
-                    onClick={onClose}
-                    color="error"
-                  >
-                    Cancel
-                  </Button>
+                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                    <Button
+                      className={classes.modalActionsButtons}
+                      variant="contained"
+                      aria-label="expand row"
+                      size="small"
+                      onClick={onClose}
+                      color="error"
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>

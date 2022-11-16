@@ -14,8 +14,8 @@ import { CoursesTablePaginationActions } from "./CoursesTablePaginationActions";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { DEFAULT_USER } from "../config/user";
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const useStyles = makeStyles({
   root: {},
@@ -27,11 +27,13 @@ export default function CoursesTable() {
   const [order, setOrder] = useState(undefined);
   const [orderBy, setOrderBy] = useState(undefined);
   const [rowsPerPage, setRowsPerPage] = useState(2);
-  const [searchKeyword, setSearchKeyword] = useState(undefined);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
-  const [isHeaderSortActive, setIsHeaderSortActive] = useState(false)
-  const [selectedHeader, setSelectedHeader] = useState('availability')
+  const [isHeaderSortActive, setIsHeaderSortActive] = useState(false);
+  const [selectedHeader, setSelectedHeader] = useState("availability");
+  const [tempSearchFilterResults, setTempSearchFilterResults] =
+    useState(undefined);
 
   const createData = (
     availability,
@@ -44,8 +46,7 @@ export default function CoursesTable() {
     time,
     days,
     building,
-    instructor,
-    isAdded
+    instructor
   ) => {
     return {
       availability,
@@ -74,6 +75,29 @@ export default function CoursesTable() {
     };
   };
 
+  const getTime = (timeString) => {
+    let [start, end] = timeString.split("-");
+
+    let timePrefix = "AM";
+
+    if (parseInt(start) < 600 || parseInt(start) === 1200) {
+      timePrefix = "PM";
+    }
+
+    if (parseInt(end) > 930) {
+      timePrefix = "AM";
+    }
+
+    start = start.split("");
+    if (start.length === 3) start.splice(0, 0, "0");
+    start.splice(2, 0, ":");
+
+    end = end.split("");
+    end.splice(2, 0, ":");
+
+    return `${start.join("")}-${end.join("")}${timePrefix}`;
+  };
+
   const rows = [
     {
       data: createData(
@@ -84,15 +108,13 @@ export default function CoursesTable() {
         "Lec & Lab",
         1,
         3,
-        "11:30-12:00PM",
+        getTime("1130-1200"),
         "M-W",
         "Patrick Taylor",
-        "Brener N",
-        false
+        "Brener N"
       ),
-      isAdded: true,
       lab: {
-        labTime: "1130-0120PM",
+        labTime: getTime("1130-0120"),
         labDays: "F",
         labInstructor: "Brener N",
       },
@@ -116,12 +138,11 @@ export default function CoursesTable() {
         "Lec",
         1,
         3,
-        "12:00-1:20PM",
+        getTime("1200-0120"),
         "T-TH",
         "Patrick Taylor",
         "Duncan W"
       ),
-      isAdded: false,
       lab: null,
       moreInfo: {
         prereqs:
@@ -143,14 +164,13 @@ export default function CoursesTable() {
         "Lec & Lab",
         2,
         4,
-        "9:30-10:20PM",
+        getTime("930-1020"),
         "M-W-F",
         "Patrick Taylor",
         "Donze D"
       ),
-      isAdded: false,
       lab: {
-        labTime: "500-0750PM",
+        labTime: getTime("500-0750"),
         labDays: "M",
         labInstructor: "Donze D",
       },
@@ -176,14 +196,13 @@ export default function CoursesTable() {
         "Lec & Lab",
         1,
         4,
-        "10:30-11:20PM",
+        getTime("1030-1120"),
         "M-W-F",
         "Patrick Taylor",
         "Aymond P"
       ),
-      isAdded: true,
       lab: {
-        labTime: "4:30-0720PM",
+        labTime: getTime("430-0720"),
         labDays: "TH",
         labInstructor: "Aymond P",
       },
@@ -217,6 +236,20 @@ export default function CoursesTable() {
     "Actions",
   ];
 
+  const TABLE_HEADERS_TO_PROP_MAP = {
+    availability: "availability",
+    enrollment: "enrollment",
+    "course num.": "courseNum",
+    "course name": "courseName",
+    type: "type",
+    section: "section",
+    credits: "credits",
+    time: "time",
+    days: "days",
+    building: "building",
+    instructor: "instructor",
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -238,14 +271,16 @@ export default function CoursesTable() {
     setSearchKeyword(event.target.value);
   };
 
-  const getRowsToFilter =  () => {
-    return (isFilterActive && filteredRows && filteredRows.length > 0) ? filteredRows : rows;
-  }
+  const getRowsToFilter = () => {
+    return isFilterActive && filteredRows && filteredRows.length > 0
+      ? filteredRows
+      : rows;
+  };
 
   const lazyFilterRowsByKeyWord = (keyWord) => {
     keyWord = keyWord.toLowerCase();
 
-    if (keyWord.length ===  0 || keyWord === '') {
+    if (keyWord.length === 0 || keyWord === "") {
       setFilteredRows([]);
       setIsSearchFilterActive(false);
     }
@@ -258,14 +293,15 @@ export default function CoursesTable() {
       return false;
     });
 
-
     setFilteredRows(newRows);
+    setTempSearchFilterResults(newRows);
     setIsSearchFilterActive(true);
   };
 
   const handleOnSearchEnter = (event) => {
     if (event.key === "Enter") {
       if (searchKeyword == "") {
+        setTempSearchFilterResults(undefined);
         setFilteredRows([]);
         setIsSearchFilterActive(false);
       } else {
@@ -274,7 +310,43 @@ export default function CoursesTable() {
     }
   };
 
+  const compareValues = (a, b) => {
+    if (b < a) {
+      return -1;
+    }
+    if (b > a) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const courseNumberDescendingComparator = (a, b) => {
+    const prop = TABLE_HEADERS_TO_PROP_MAP["course num."];
+
+    a = parseInt(a.data[prop].split(" ")[1]);
+    b = parseInt(b.data[prop].split(" ")[1]);
+
+    return compareValues(a, b);
+  };
+
+  const courseNameDescendingComparator = (a, b) => {
+    const prop = TABLE_HEADERS_TO_PROP_MAP["course name"];
+
+    a = a.data[prop];
+    b = b.data[prop];
+
+    return a.localeCompare(b);
+  };
+
   const descendingComparator = (a, b, orderBy) => {
+    if (orderBy == "course num.") {
+      return courseNumberDescendingComparator(a, b);
+    }
+
+    if (orderBy == "course name") {
+      return courseNameDescendingComparator(a, b);
+    }
+
     if (b.data[orderBy] < a.data[orderBy]) {
       return -1;
     }
@@ -282,16 +354,15 @@ export default function CoursesTable() {
       return 1;
     }
     return 0;
-  }
+  };
 
   const getComparator = (order, orderBy) => {
-    if (order === 'desc') {
-      return (a, b) => descendingComparator(a, b, orderBy)
+    if (order === "desc") {
+      return (a, b) => descendingComparator(a, b, orderBy);
+    } else if (order === "asc") {
+      return (a, b) => -descendingComparator(a, b, orderBy);
     }
-    else if (order === 'asc') {
-      return (a, b) => -descendingComparator(a, b, orderBy)
-    }
-  }
+  };
 
   const checkIsCourseAdded = (row) => {
     for (const course of DEFAULT_USER.currentScheduledClasses) {
@@ -301,26 +372,40 @@ export default function CoursesTable() {
     return false;
   };
 
-  // Todo: Filtering after using table search should go back to the initial table search results order
-  const handleOnHeaderClick = (event, headerName)  => {
-    headerName = headerName.toLowerCase()
+  // Todo: If there is time, look into way tempSearchResults does not maintain its under at all
+  const handleOnHeaderClick = (event, headerName) => {
+    const NON_SORTABLE_HEADERS = [
+      "type",
+      "time",
+      "days",
+      "building",
+      "instructor",
+      "actions",
+    ];
+    if (NON_SORTABLE_HEADERS.includes(headerName.toLowerCase())) {
+      return;
+    }
+
+    headerName = headerName.toLowerCase();
     let newRows;
 
     if (selectedHeader != headerName || order === undefined) {
-      setOrder('desc')
-      newRows = getRowsToFilter().sort(getComparator('desc', headerName));
-    }
-    else if (order === 'desc') {
-      setOrder('asc')
-      newRows = getRowsToFilter().sort(getComparator('asc', headerName));
-    }
-    else if ( order === 'asc') {
+      setOrder("desc");
+      newRows = getRowsToFilter().sort(getComparator("desc", headerName));
+    } else if (order === "desc") {
+      setOrder("asc");
+      newRows = getRowsToFilter().sort(getComparator("asc", headerName));
+    } else if (order === "asc") {
       setSelectedHeader(headerName);
       setOrderBy(undefined);
-      setOrder(undefined)
+      setOrder(undefined);
 
       setIsHeaderSortActive(false);
       if (!isSearchFilterActive) setFilteredRows([]);
+      else {
+        console.log("IN ELSE", tempSearchFilterResults);
+        setFilteredRows(tempSearchFilterResults);
+      }
 
       return;
     }
@@ -329,22 +414,26 @@ export default function CoursesTable() {
     setOrderBy(headerName);
     setFilteredRows(newRows);
     setIsHeaderSortActive(true);
-  }
+  };
 
   const showHeaderSortDirection = () => {
     if (order === undefined)
-      return (<ArrowUpwardIcon sx={{fontSize: 15, color: "#C5C5C5", marginTop: .7}}/>)
-    else if (order === 'desc')
-      return (<ArrowDownwardIcon sx={{fontSize: 15, marginTop: .7}}/>)
-    else if (order === 'asc')
-      return (<ArrowUpwardIcon sx={{fontSize: 15, marginTop: .7}}/>)
-  }
+      return (
+        <ArrowUpwardIcon
+          sx={{ fontSize: 15, color: "#C5C5C5", marginTop: 0.7 }}
+        />
+      );
+    else if (order === "desc")
+      return <ArrowDownwardIcon sx={{ fontSize: 15, marginTop: 0.7 }} />;
+    else if (order === "asc")
+      return <ArrowUpwardIcon sx={{ fontSize: 15, marginTop: 0.7 }} />;
+  };
 
   useEffect(() => {
     console.log(
-        "DEBUG FOR FITLERS IN COURSESTABLE.JS",
-        filteredRows,
-        filteredRows.length
+      "DEBUG FOR FITLERS IN COURSESTABLE.JS",
+      filteredRows,
+      filteredRows.length
     );
   }, [filteredRows]);
 
@@ -397,15 +486,31 @@ export default function CoursesTable() {
                   align="center"
                   onClick={(event) => handleOnHeaderClick(event, headerName)}
                 >
-                  <Grid  sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <Grid item >
+                  <Grid
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Grid item>
                       <Typography sx={{ fontSize: 10, fontWeight: 700 }}>
                         {headerName}
                       </Typography>
                     </Grid>
-                    <Grid item xs={3} sx={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Grid item>
-                        {selectedHeader == headerName.toLowerCase() ? showHeaderSortDirection(headerName) : ''}
+                        {selectedHeader == headerName.toLowerCase()
+                          ? showHeaderSortDirection(headerName)
+                          : ""}
                       </Grid>
                     </Grid>
                   </Grid>
