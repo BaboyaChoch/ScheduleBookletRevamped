@@ -9,8 +9,8 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles({
     root: {},
     logo:{
-        height: 55,
-        paddingBottom:20
+        height: 50,
+        paddingBottom:20,
     }
 })
 
