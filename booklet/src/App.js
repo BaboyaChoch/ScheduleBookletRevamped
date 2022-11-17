@@ -7,6 +7,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CoursesTable from "./components/CoursesTable";
 
+import NavBar from './components/NavBar';
+import SearchBar from './components/SearchBar'
+
 const useStyles = makeStyles({
   root: {
     backgroundColor: "#F6F4F1",
@@ -20,7 +23,7 @@ const useStyles = makeStyles({
     height: "100vh",
   },
   search: {
-    backgroundColor: "black",
+    backgroundColor: "",
   },
   main: {},
   filters: {
@@ -75,15 +78,13 @@ export default function App() {
     <Box>
       <Grid container className={classes.root} direction="column">
         <Grid item className={classes.navBar}>
-          <Label>THIS IS THE NAV BAR</Label>
+          <NavBar/>
         </Grid>
         <Grid item container className={classes.content}>
           <Grid item xs={1.25} />
           <Grid item container direction="column" xs={9.5}>
             <Grid item container xs={1} className={classes.search}>
-              <Label>
-                SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
-              </Label>
+              <SearchBar/>
             </Grid>
             <Grid item container xs={11} className={classes.main}>
               <Grid item container xs={2.25} className={classes.filters}>
