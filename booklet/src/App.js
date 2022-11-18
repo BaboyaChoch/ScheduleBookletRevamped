@@ -8,6 +8,9 @@ import Box from "@mui/material/Box";
 
 // File Imports
 import Filters from "./components/Filters";
+import CoursesTable from "./components/CoursesTable";
+import NavBar from "./components/NavBar";
+import SearchBar from "./components/SearchBar";
 
 const useStyles = makeStyles({
   root: {
@@ -15,24 +18,16 @@ const useStyles = makeStyles({
     flexGrow: 1,
     backgroundColor: "#F6F4F1",
   },
-  navBar: {
-    backgroundColor: "brown",
-  },
+  navBar: {},
   content: {
     flexGrow: 1,
     height: "100%",
     overflow: "auto",
   },
-  search: {
-    backgroundColor: "black",
-  },
+  search: {},
   main: {},
-  filters: {
-    border: " 1px solid green",
-  },
-  table: {
-    backgroundColor: "grey",
-  },
+  filters: {},
+  table: {},
   schedule: {
     width: 577,
     height: 36,
@@ -66,6 +61,7 @@ export default function App() {
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
+    console.log(theme);
   });
 
   useEffect(() => {
@@ -80,7 +76,7 @@ export default function App() {
     <>
       <Grid container className={classes.root} direction="column">
         <Grid item className={classes.navBar}>
-          <Label>THIS IS THE NAV BAR</Label>
+          <NavBar />
         </Grid>
 
         <Container maxWidth="xl">
@@ -90,18 +86,15 @@ export default function App() {
             direction="column"
             alignItems="stretch"
           >
-            <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
-            <Grid item container direction="column" xs={9.5}>
+            <Grid item xs={1.25} />
+            <Grid item container direction="column" xs={9.5} spacing={3}>
               <Grid item container xs={1} className={classes.search}>
-                <Label>
-                  SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
-                </Label>
+                <SearchBar />
               </Grid>
               <Grid
                 item
                 container
                 wrap="nowrap"
-                sx={{ height: "80%" }}
                 xs={11}
                 className={classes.main}
               >
@@ -115,11 +108,11 @@ export default function App() {
                   />
                 </Grid>
                 <Grid item container xs={9.5} className={classes.table}>
-                  <Label>INTERACTIVE TABLE</Label>
+                  <CoursesTable />
                 </Grid>
               </Grid>
+              <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
             </Grid>
-            <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
           </Grid>
         </Container>
       </Grid>
