@@ -27,7 +27,7 @@ function valueText(value) {
 
 export default function CourseTime() {
   const classes = useStyles();
-  const [courseTime, setCourseTime] = useState([10, 50]);
+  const [courseTime, setCourseTime] = useState([0, 100]);
 
   const handleChange = (event, newValue) => {
     setCourseTime(newValue);

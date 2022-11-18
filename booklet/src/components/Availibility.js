@@ -25,11 +25,14 @@ export default function Availability() {
         <RadioGroup defaultValue="allCourses">
           {availabilityOptions.map((element) => {
             return (
-              <FormControlLabel
-                value={element.value}
-                control={<Radio />}
-                label={element.label}
-              />
+              <Grid item>
+
+                <FormControlLabel
+                  value={element.value}
+                  control={<Radio />}
+                  label={element.label}
+                />
+              </Grid>
             );
           })}
         </RadioGroup>

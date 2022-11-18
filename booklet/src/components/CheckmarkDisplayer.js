@@ -4,18 +4,15 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
+  Container,
   Grid,
+  Box,
   FormGroup,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Stack } from "@mui/system";
 
 const useStyles = makeStyles({
-  container: {
-    justifyContent: "end",
-    alignItems: "center",
-    width: "100%",
-  },
   headerText: {
     color: "#674EA7",
   },
@@ -38,26 +35,28 @@ export default function CheckmarkDisplayer(props) {
   const [courseLevel, setCourseLevel] = useState(0);
 
   return (
-    <Grid container direction="column" spacing={1}>
+    <Box>
+      {/* <Grid container direction={"column"} spacing={1}> */}
       {/* Title - Course Level */}
-      <Grid item xs>
-        <Typography sx={{ color: "#674EA7" }}> {headerText}</Typography>
-      </Grid>
+
+      <Typography sx={{ color: "#674EA7" }}> {headerText}</Typography>
+
       {/* Body - checklist */}
-      <Grid item container>
-        {itemList.map((item) => {
-          return (
-            <Grid item>
+      <Box sx={{paddingLeft: 1}}>
+        <FormGroup>
+          {itemList.map((item) => {
+            return (
               <FormControlLabel
-                spacing={1}
                 key={item.id}
                 control={<Checkbox />}
                 label={item.label}
               />
-            </Grid>
-          );
-        })}
-      </Grid>
-    </Grid>
+            );
+          })}
+        </FormGroup>
+      </Box>
+
+      {/* </Grid> */}
+    </Box>
   );
 }

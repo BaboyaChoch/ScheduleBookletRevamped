@@ -18,15 +18,18 @@ const useStyles = makeStyles({
     height: "5vh",
   },
   content: {
+    flexGrow: 1,
     backgroundColor: "#F6F4F1",
     height: "100vh",
   },
   search: {
     backgroundColor: "black",
   },
-  main: {},
+  main: {
+    border: "1px solid green",
+  },
   filters: {
-    backgroundColor: "white",
+    border: " 1px solid green",
   },
   table: {
     backgroundColor: "grey",
@@ -80,7 +83,7 @@ export default function App() {
         <Grid item className={classes.navBar}>
           <Label>THIS IS THE NAV BAR</Label>
         </Grid>
-        <Grid item container className={classes.content}>
+        <Grid item container className={classes.content} direction="row">
           <Grid item xs={1.25} />
           <Grid item container direction="column" xs={9.5}>
             <Grid item container xs={1} className={classes.search}>
@@ -88,8 +91,15 @@ export default function App() {
                 SEARCH OPTIONS [SEMESTER/DEPARTMENT/'Search Courses' BUTTON]
               </Label>
             </Grid>
-            <Grid item container xs={11} className={classes.main}>
-              <Grid item container xs={2.25} className={classes.filters}>
+            <Grid
+              item
+              container
+              wrap="nowrap"
+              sx={{ overflow: "auto" }}
+              xs={11}
+              className={classes.main}
+            >
+              <Grid item xs={2.25} className={classes.filters}>
                 <Filters />
               </Grid>
               <Grid item xs={0.25} display="flex" justifyContent="center">

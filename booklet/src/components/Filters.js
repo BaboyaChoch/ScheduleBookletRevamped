@@ -57,19 +57,15 @@ export default function Filters(props) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root} xs={12}>
-      <Stack
-        className={classes.filterStack}
-        direction="column"
-        sx={{ overflow: "auto" }}
-      >
+    <Box sx={{ width: "100%" }}>
+      <Stack divider={<Divider />} spacing={1}>
         <div className={classes.filterStack}> Filters</div>
         {/* Course Time Component*/}
-        <Divider />
+
         <div>
           <CourseTime />
         </div>
-        <Divider />
+
         {/* Course Level through the checkmarkDisp. componenet */}
         <div>
           <CheckmarkDisplayer
@@ -78,19 +74,25 @@ export default function Filters(props) {
           />
         </div>
 
-        <Divider />
         {/* Availability Component */}
         <Availability />
-        <Divider />
+
         {/* Using the Course Component */}
-        <CheckmarkDisplayer headerText="Course Days" itemList={courseDayList} />
-        <Divider />
+        <div>
+          <CheckmarkDisplayer
+            headerText="Course Days"
+            itemList={courseDayList}
+          />
+        </div>
+
         {/* Credit Hours Component */}
-        <CheckmarkDisplayer
-          headerText="Credit Hours"
-          itemList={credtHourList}
-        />
-        <Divider />
+        <div>
+          <CheckmarkDisplayer
+            headerText="Credit Hours"
+            itemList={credtHourList}
+          />
+        </div>
+
         <Box sx={{ paddingTop: 2, alignSelf: "center" }}>
           <Button
             size="small"
