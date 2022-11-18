@@ -83,7 +83,7 @@ export default function App() {
           <Label>THIS IS THE NAV BAR</Label>
         </Grid>
 
-        <Container disableGutters={false}>
+        <Container maxWidth="xl">
           <Grid
             container
             className={classes.content}
