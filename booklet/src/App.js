@@ -26,7 +26,9 @@ const useStyles = makeStyles({
   search: {
     backgroundColor: "black",
   },
-  main: {},
+  main: {
+    border: "1px solid green",
+  },
   filters: {
     border: " 1px solid green",
   },
