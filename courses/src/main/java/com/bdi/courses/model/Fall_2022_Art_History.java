@@ -6,16 +6,60 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
 @Entity
-@Table(name = "course")
-public class Course {
-    
-    public Course() {
+@Table(name = "Fall_2022_Art_History")
+public class Fall_2022_Art_History {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int availability;
+    private int enrollment;
+    private String coursenum;
+    private String coursename;
+    private String type;
+    private int section;
+    private int credits;
+    private String time;
+    private String days;
+    private String building;
+    private String instructor;
+    private String moreinfo;
+    private String specialenrollment;
+    private int keey;
+    private boolean lab;
+    private int labhash;
+    private String prereqs;
+    private String notes;
+    private String description;
+
+    public Fall_2022_Art_History() {
         
     }
-    
+    public Fall_2022_Art_History(int availability, int enrollment, String coursenum, String coursename, String type, int section,
+            int credits, String time, String days, String building, String instructor, String moreinfo,
+            String specialenrollment, int keey,boolean lab, int labhash, String prereqs, String notes, String description) {
+        super();
+        this.availability = availability;
+        this.enrollment = enrollment;
+        this.coursenum = coursenum;
+        this.coursename = coursename;
+        this.type = type;
+        this.section = section;
+        this.credits = credits;
+        this.time = time;
+        this.days = days;
+        this.building = building;
+        this.instructor = instructor;
+        this.moreinfo = moreinfo;
+        this.specialenrollment = specialenrollment;
+        this.keey = keey;
+        this.labhash = labhash;
+        this.lab = lab;
+        this.prereqs = prereqs;
+        this.notes = notes;
+        this.description = description;
+    }
     public Long getId() {
         return id;
     }
@@ -112,30 +156,6 @@ public class Course {
     public void setLab(boolean lab) {
         this.lab = lab;
     }
-    public Course(int availability, int enrollment, String coursenum, String coursename, String type, int section,
-            int credits, String time, String days, String building, String instructor, String moreinfo,
-            String specialenrollment, int keey,boolean lab, int labhash, String prereqs, String notes, String description) {
-        super();
-        this.availability = availability;
-        this.enrollment = enrollment;
-        this.coursenum = coursenum;
-        this.coursename = coursename;
-        this.type = type;
-        this.section = section;
-        this.credits = credits;
-        this.time = time;
-        this.days = days;
-        this.building = building;
-        this.instructor = instructor;
-        this.moreinfo = moreinfo;
-        this.specialenrollment = specialenrollment;
-        this.keey = keey;
-        this.labhash = labhash;
-        this.lab = lab;
-        this.prereqs = prereqs;
-        this.notes = notes;
-        this.description = description;
-    }
     public int getLabhash() {
         return labhash;
     }
@@ -160,27 +180,4 @@ public class Course {
     public void setDescription(String description) {
         this.description = description;
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int availability;
-    private int enrollment;
-    private String coursenum;
-    private String coursename;
-    private String type;
-    private int section;
-    private int credits;
-    private String time;
-    private String days;
-    private String building;
-    private String instructor;
-    private String moreinfo;
-    private String specialenrollment;
-    private int keey;
-    private boolean lab;
-    private int labhash;
-    private String prereqs;
-    private String notes;
-    private String description;
-
 }
