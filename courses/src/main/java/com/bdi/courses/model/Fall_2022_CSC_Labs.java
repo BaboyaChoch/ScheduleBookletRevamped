@@ -8,8 +8,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "lab")
-public class Lab {
+@Table(name = "Fall_2022_CSC_Labs")
+public class Fall_2022_CSC_Labs {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class Lab {
     
     private int keey;
     
-    public Lab() {
+    public Fall_2022_CSC_Labs() {
     }
     
-    public Lab(String type, String labtime, String labdays, String labinstructor, int keey) {
+    public Fall_2022_CSC_Labs(String type, String labtime, String labdays, String labinstructor, int keey) {
         super();
         this.type = type;
         this.labtime = labtime;
