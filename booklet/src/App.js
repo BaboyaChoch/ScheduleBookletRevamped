@@ -56,6 +56,7 @@ const Label = ({ children }) => {
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [filters, setFilters] = useState(null);
   const classes = useStyles();
   const theme = useTheme();
 
@@ -72,6 +73,9 @@ export default function App() {
     theme.palette.mode = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
   return (
     <>
       <Grid container className={classes.root} direction="column">
@@ -99,7 +103,7 @@ export default function App() {
                 className={classes.main}
               >
                 <Grid item xs={2.25} className={classes.filters}>
-                  <Filters />
+                  <Filters filters={filters} setFilters={setFilters} />
                 </Grid>
                 <Grid item xs={0.25} display="flex" justifyContent="center">
                   <Divider

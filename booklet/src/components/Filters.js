@@ -28,33 +28,39 @@ const useStyles = makeStyles({
   },
 });
 
-const courseLevelList = [
-  { id: 1, label: "1000 Level" },
-  { id: 2, label: "2000 Level" },
-  { id: 3, label: "3000 Level" },
-  { id: 4, label: "4000 Level" },
-  { id: 5, label: "5000+ Level" },
+let courseLevelList = [
+  { id: 1, label: "1000 Level", checked: false },
+  { id: 2, label: "2000 Level", checked: false },
+  { id: 3, label: "3000 Level", checked: false },
+  { id: 4, label: "4000 Level", checked: false },
+  { id: 5, label: "5000+ Level", checked: false },
 ];
 
 const courseDayList = [
-  { id: 1, label: "M" },
-  { id: 2, label: "T" },
-  { id: 3, label: "W" },
-  { id: 4, label: "TH" },
-  { id: 5, label: "F" },
+  { id: 1, label: "M", checked: false },
+  { id: 2, label: "T", checked: false },
+  { id: 3, label: "W", checked: false },
+  { id: 4, label: "TH", checked: false },
+  { id: 5, label: "F", checked: false },
 ];
 
 const credtHourList = [
-  { id: 1, label: 1.0 },
-  { id: 2, label: 2.0 },
-  { id: 3, label: 3.0 },
-  { id: 4, label: 4.0 },
-  { id: 5, label: 5.0 },
-  { id: 6, label: "Other" },
+  { id: 1, label: 1.0, checked: false },
+  { id: 2, label: 2.0, checked: false },
+  { id: 3, label: 3.0, checked: false },
+  { id: 4, label: 4.0, checked: false },
+  { id: 5, label: 5.0, checked: false },
+  { id: 6, label: "Other", checked: false },
 ];
 
-export default function Filters(props) {
+export default function Filters({ filters, setFilters }) {
   const classes = useStyles();
+  const [courseTimes, setCourseTimes] = useState([0, 100]);
+  // False -> full class, True -> classes available, Undefined -> all classes
+  const [availability, setAvailabilitys] = useState("");
+  const [courseLevels, setCourseLevels] = useState(courseLevelList);
+  const [courseDays, setCourseDays] = useState(courseDayList);
+  const [creditHours, setCreditHours] = useState(credtHourList);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -63,23 +69,27 @@ export default function Filters(props) {
         {/* Course Time Component*/}
 
         <div>
-          <CourseTime />
+          <CourseTime value={courseTimes} setValue={setCourseTimes} />
         </div>
 
         {/* Course Level through the checkmarkDisp. componenet */}
         <div>
           <CheckmarkDisplayer
+            value={courseLevels}
+            setValue={setCourseLevels}
             headerText="Course Level"
             itemList={courseLevelList}
           />
         </div>
 
         {/* Availability Component */}
-        <Availability />
+        <Availability value={availability} setValue={setAvailabilitys} />
 
         {/* Using the Course Component */}
         <div>
           <CheckmarkDisplayer
+            value={courseDays}
+            setValue={setCourseDays}
             headerText="Course Days"
             itemList={courseDayList}
           />
@@ -88,6 +98,8 @@ export default function Filters(props) {
         {/* Credit Hours Component */}
         <div>
           <CheckmarkDisplayer
+            value={creditHours}
+            setValue={setCreditHours}
             headerText="Credit Hours"
             itemList={credtHourList}
           />
@@ -98,9 +110,15 @@ export default function Filters(props) {
             size="small"
             sx={{ width: "100%" }}
             variant="contained"
-            onClick={() => {
-              return alert("submit filters");
-            }}
+            onClick={() =>
+              setFilters({
+                course_times: courseTimes,
+                course_levels: courseLevels,
+                availability: availability,
+                course_days: courseDays,
+                credit_hours: creditHours,
+              })
+            }
           >
             Apply Filters
           </Button>

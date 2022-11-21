@@ -25,14 +25,30 @@ const useStyles = makeStyles({
   },
 });
 
-function valueText(value) {
-  return `${value}°C`;
-}
-
-export default function CheckmarkDisplayer(props) {
-  const { headerText, itemList } = props;
+export default function CheckmarkDisplayer({
+  value,
+  setValue,
+  headerText,
+  itemList,
+}) {
   const classes = useStyles();
-  const [courseLevel, setCourseLevel] = useState(0);
+
+  const handleChange = (event, index) => {
+    // let newArr = [...itemList];
+    // console.log(newArr);
+    // setValue(event.target.checked);
+    // console.log(value);
+    // console.log("this is: ", value, value[index]);
+    // console.log("event target", event.target.checked);
+    const newValue = value;
+    newValue[index].checked = event.target.checked;
+    setValue(newValue);
+    console.log(newValue);
+  };
+
+  React.useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <Box>
@@ -44,12 +60,13 @@ export default function CheckmarkDisplayer(props) {
       {/* Body - checklist */}
       <Box sx={{paddingLeft: 1}}>
         <FormGroup>
-          {itemList.map((item) => {
+          {itemList.map((element, index) => {
             return (
               <FormControlLabel
-                key={item.id}
+                key={element.id}
+                onChange={(event) => handleChange(event, index)}
                 control={<Checkbox />}
-                label={item.label}
+                label={element.label}
               />
             );
           })}
