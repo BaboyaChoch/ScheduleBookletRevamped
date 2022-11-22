@@ -406,7 +406,6 @@ export default function CoursesTable() {
       setIsHeaderSortActive(false);
       if (!isSearchFilterActive) setFilteredRows([]);
       else {
-        console.log("IN ELSE", tempSearchFilterResults);
         setFilteredRows(tempSearchFilterResults);
       }
 

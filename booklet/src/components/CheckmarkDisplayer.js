@@ -34,21 +34,10 @@ export default function CheckmarkDisplayer({
   const classes = useStyles();
 
   const handleChange = (event, index) => {
-    // let newArr = [...itemList];
-    // console.log(newArr);
-    // setValue(event.target.checked);
-    // console.log(value);
-    // console.log("this is: ", value, value[index]);
-    // console.log("event target", event.target.checked);
     const newValue = value;
     newValue[index].checked = event.target.checked;
     setValue(newValue);
-    console.log(newValue);
   };
-
-  // React.useEffect(() => {
-  //   console.log(value);
-  // }, [value]);
 
   return (
     <Box>

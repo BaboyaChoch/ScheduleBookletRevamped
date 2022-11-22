@@ -62,20 +62,21 @@ export default function App() {
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
-    console.log(theme);
+    // console.log(theme);
   });
 
   useEffect(() => {
-    console.log(
-      `CURRENT_THEME_MODE: ${theme.palette.mode}`,
-      `IS_DARK_MODE: ${isDarkMode}`
-    );
+    // console.log(
+    //   `CURRENT_THEME_MODE: ${theme.palette.mode}`,
+    //   `IS_DARK_MODE: ${isDarkMode}`
+    // );
     theme.palette.mode = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
   useEffect(() => {
-    console.log(filters);
+    console.log("FILTERS_TO_APPLY: ",filters);
   }, [filters]);
+
   return (
     <>
       <Grid container className={classes.root} direction="column">
@@ -115,16 +116,15 @@ export default function App() {
                   <CoursesTable />
                 </Grid>
               </Grid>
-              <Grid item xs={1.25} sx={{ backgroundColor: "green" }} />
             </Grid>
           </Grid>
         </Container>
       </Grid>
-      {/* <Box>
+      <Box>
         <div className={classes.schedule}>
           <Label>SCHEDULE MODAL</Label>
         </div>
-      </Box> */}
+      </Box>
     </>
   );
 }
