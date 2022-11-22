@@ -1,7 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
-import { Box, Stack, Typography, Slider, Grid } from "@mui/material";
+import { Box, Stack, Typography, Slider, Grid, TextField } from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 const useStyles = makeStyles({
   container: {
@@ -21,19 +24,18 @@ const useStyles = makeStyles({
   },
 });
 
-function valueText(value) {
-  return `${value}°C`;
-}
-
-export default function CourseTime() {
+export default function CourseTime({ value, setValue }) {
   const classes = useStyles();
-  const [courseTime, setCourseTime] = useState([0, 100]);
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
 
-  const handleChange = (event, newValue) => {
-    setCourseTime(newValue);
-  };
+  React.useEffect(() => {
+    setValue([startTime, endTime]);
+    console.log(value);
+  }, [startTime, endTime]);
+
   return (
-    <Grid container direction="column" spacing={4}>
+    <Grid container direction="column" spacing={2}>
       {/* Title - Course time */}
       <Grid item xs>
         <Typography sx={{ color: "#674EA7" }}> Course Time</Typography>
@@ -41,14 +43,39 @@ export default function CourseTime() {
       {/* Body - Slider */}
       <Grid item xs>
         {/* TODO: change color of the label to display the actual time rather than a number. */}
-        <Slider
+        <Grid item>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => {
+                setStartTime(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+        <Grid item sx={{ paddingTop: 1 }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => {
+                setEndTime(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Grid>
+
+        {/* <Slider
           getAriaLabel={() => "Course Time Range"}
           value={courseTime}
           step={30}
           onChange={handleChange}
           valueLabelDisplay="on"
           getAriaValueText={valueText}
-        />
+        /> */}
       </Grid>
     </Grid>
   );

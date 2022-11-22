@@ -55,7 +55,7 @@ const credtHourList = [
 
 export default function Filters({ filters, setFilters }) {
   const classes = useStyles();
-  const [courseTimes, setCourseTimes] = useState([0, 100]);
+  const [courseTimes, setCourseTimes] = useState([]);
   // False -> full class, True -> classes available, Undefined -> all classes
   const [availability, setAvailabilitys] = useState("");
   const [courseLevels, setCourseLevels] = useState(courseLevelList);

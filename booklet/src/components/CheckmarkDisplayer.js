@@ -46,9 +46,9 @@ export default function CheckmarkDisplayer({
     console.log(newValue);
   };
 
-  React.useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // React.useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
 
   return (
     <Box>
