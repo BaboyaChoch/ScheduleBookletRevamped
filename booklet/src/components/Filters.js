@@ -85,7 +85,7 @@ export default function Filters({ filters, setFilters }) {
         {/* Availability Component */}
         <Availability value={availability} setValue={setAvailabilitys} />
 
-        {/* Using the Course Component */}
+        {/* Course Component */}
         <div>
           <CheckmarkDisplayer
             value={courseDays}

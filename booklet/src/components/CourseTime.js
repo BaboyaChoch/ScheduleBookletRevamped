@@ -5,6 +5,7 @@ import { makeStyles, styled } from "@mui/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles({
   container: {
@@ -42,12 +43,12 @@ export default function CourseTime({ value, setValue }) {
       </Grid>
       {/* Body - Slider */}
       <Grid item xs>
-        {/* TODO: change color of the label to display the actual time rather than a number. */}
         <Grid item>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               label="Start Time"
               value={startTime}
+              // to change time w/ dayjs -> dayjs(newValue).format("HH:mm A"
               onChange={(newValue) => {
                 setStartTime(newValue);
               }}
@@ -67,15 +68,6 @@ export default function CourseTime({ value, setValue }) {
             />
           </LocalizationProvider>
         </Grid>
-
-        {/* <Slider
-          getAriaLabel={() => "Course Time Range"}
-          value={courseTime}
-          step={30}
-          onChange={handleChange}
-          valueLabelDisplay="on"
-          getAriaValueText={valueText}
-        /> */}
       </Grid>
     </Grid>
   );
