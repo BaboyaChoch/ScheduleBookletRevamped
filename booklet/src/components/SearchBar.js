@@ -10,7 +10,7 @@ import {
 
 export default function Search() {
   return (
-    <Grid container sx={{ backgroundColor: "" }}>
+    <Grid container sx={{}}>
       <Grid item xs={4} sx={{ ml: 3, mt: 2, backgroundColor: "" }}>
         <Typography fontWeight="bold" color="#674EA7">
           Semester / Year{" "}

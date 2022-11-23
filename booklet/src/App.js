@@ -1,8 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { Divider, Grid, useTheme, Container } from "@mui/material";
-import { makeStyles, styled } from "@mui/styles";
-import Paper from "@mui/material/Paper";
+import { makeStyles } from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
@@ -14,20 +13,7 @@ import SearchBar from "./components/SearchBar";
 
 const useStyles = makeStyles({
   root: {
-    height: "100%",
-    flexGrow: 1,
-    backgroundColor: "#F6F4F1",
   },
-  navBar: {},
-  content: {
-    flexGrow: 1,
-    height: "100%",
-    overflow: "auto",
-  },
-  search: {},
-  main: {},
-  filters: {},
-  table: {},
   schedule: {
     width: 577,
     height: 36,
@@ -55,21 +41,23 @@ const Label = ({ children }) => {
 };
 
 export default function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [filters, setFilters] = useState(null);
   const classes = useStyles();
   const theme = useTheme();
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [filters, setFilters] = useState(null);
+
+
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
-    // console.log(theme);
+    console.log(theme);
   });
 
   useEffect(() => {
-    // console.log(
-    //   `CURRENT_THEME_MODE: ${theme.palette.mode}`,
-    //   `IS_DARK_MODE: ${isDarkMode}`
-    // );
+    console.log(
+      `CURRENT_THEME_MODE: ${theme.palette.mode}`,
+      `IS_DARK_MODE: ${isDarkMode}`
+    );
     theme.palette.mode = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
@@ -78,31 +66,18 @@ export default function App() {
   }, [filters]);
 
   return (
-    <>
-      <Grid container className={classes.root} direction="column">
-        <Grid item className={classes.navBar}>
+    <div className={classes.root}>
+      <Grid container>
+        <Grid item sx={{width: '100%'}}>
           <NavBar />
         </Grid>
-
-        <Container maxWidth="xl">
-          <Grid
-            container
-            className={classes.content}
-            direction="column"
-            alignItems="stretch"
-          >
-            <Grid item xs={1.25} />
-            <Grid item container direction="column" xs={9.5} spacing={3}>
-              <Grid item container xs={1} className={classes.search}>
+        <Grid item sx={{width: '100%'}}>
+          <Container maxWidth={"xl"}>
+            <Grid container direction='column' spacing={2}>
+              <Grid item sx={{ width: '100%'}}>
                 <SearchBar />
               </Grid>
-              <Grid
-                item
-                container
-                wrap="nowrap"
-                xs={11}
-                className={classes.main}
-              >
+              <Grid container item>
                 <Grid item xs={2.25} className={classes.filters}>
                   <Filters filters={filters} setFilters={setFilters} />
                 </Grid>
@@ -117,14 +92,14 @@ export default function App() {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </Grid>
       </Grid>
       <Box>
         <div className={classes.schedule}>
           <Label>SCHEDULE MODAL</Label>
         </div>
       </Box>
-    </>
+    </div>
   );
 }

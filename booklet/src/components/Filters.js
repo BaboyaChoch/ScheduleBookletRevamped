@@ -65,11 +65,12 @@ export default function Filters({ filters, setFilters }) {
   const [creditHours, setCreditHours] = useState(JSON.parse(JSON.stringify(creditHourList)));
   const AVAILABILITY_DEFAULT_VALUE = "ALL_COURSES";
 
-  const [openCourseTimeFilter, setOpenCourseTimeFilter] = useState(false);
-  const [openCourseLevelsFilter, setOpenCourseLevelsFilter] = useState(false);
-  const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
-  const [openCourseDaysFilter, setOpenCourseDaysFilter] = useState(false);
-  const [openCreditHoursFilter, setOpenCreditHoursFilter] = useState(false);
+  const FITLER_OPTIONS_DEFAULT_SHOW_VALUE = true;
+  const [openCourseTimeFilter, setOpenCourseTimeFilter] = useState(FITLER_OPTIONS_DEFAULT_SHOW_VALUE);
+  const [openCourseLevelsFilter, setOpenCourseLevelsFilter] = useState(FITLER_OPTIONS_DEFAULT_SHOW_VALUE);
+  const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(FITLER_OPTIONS_DEFAULT_SHOW_VALUE);
+  const [openCourseDaysFilter, setOpenCourseDaysFilter] = useState(FITLER_OPTIONS_DEFAULT_SHOW_VALUE);
+  const [openCreditHoursFilter, setOpenCreditHoursFilter] = useState(FITLER_OPTIONS_DEFAULT_SHOW_VALUE);
 
   const handleApplyFilters = () => {
     setFilters({
