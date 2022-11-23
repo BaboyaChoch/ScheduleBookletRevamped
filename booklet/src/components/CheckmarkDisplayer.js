@@ -41,11 +41,6 @@ export default function CheckmarkDisplayer({
 
   return (
     <Box>
-      {/* <Grid container direction={"column"} spacing={1}> */}
-      {/* Title - Course Level */}
-
-      <Typography sx={{ color: "#674EA7" }}> {headerText}</Typography>
-
       {/* Body - checklist */}
       <Box sx={{paddingLeft: 1}}>
         <FormGroup>
@@ -61,8 +56,6 @@ export default function CheckmarkDisplayer({
           })}
         </FormGroup>
       </Box>
-
-      {/* </Grid> */}
     </Box>
   );
 }

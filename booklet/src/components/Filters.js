@@ -1,19 +1,19 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import {
   Box,
   Stack,
-  Typography,
   Divider,
   Button,
-  Container,
+  Typography,
 } from "@mui/material";
-import { makeStyles, styled } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import React from "react";
 
 // File Imports
 import CourseTime from "./CourseTime";
 import CheckmarkDisplayer from "./CheckmarkDisplayer";
 import Availability from "./Availibility";
+import CollapsableFilter from "./CollapsableFilter";
 
 const useStyles = makeStyles({
   root: {},
@@ -57,12 +57,19 @@ const creditHourList = [
 export default function Filters({ filters, setFilters }) {
   const classes = useStyles();
   const [courseTimes, setCourseTimes] = useState(null);
+
   // False -> full class, True -> classes available, Undefined -> all classes
   const [availability, setAvailability] = useState(null);
   const [courseLevels, setCourseLevels] = useState(JSON.parse(JSON.stringify(courseLevelList)));
   const [courseDays, setCourseDays] = useState(JSON.parse(JSON.stringify(courseDayList)));
   const [creditHours, setCreditHours] = useState(JSON.parse(JSON.stringify(creditHourList)));
   const AVAILABILITY_DEFAULT_VALUE = "ALL_COURSES";
+
+  const [openCourseTimeFilter, setOpenCourseTimeFilter] = useState(false);
+  const [openCourseLevelsFilter, setOpenCourseLevelsFilter] = useState(false);
+  const [openAvailabilityFilter, setOpenAvailabilityFilter] = useState(false);
+  const [openCourseDaysFilter, setOpenCourseDaysFilter] = useState(false);
+  const [openCreditHoursFilter, setOpenCreditHoursFilter] = useState(false);
 
   const handleApplyFilters = () => {
     setFilters({
@@ -73,59 +80,67 @@ export default function Filters({ filters, setFilters }) {
       credit_hours: JSON.stringify(creditHours) === JSON.stringify(creditHourList) ? null : creditHours,
     })
   };
-
-
+// border: '1px solid red',
   return (
     <Box sx={{ width: "100%" }}>
       <Stack divider={<Divider />} spacing={1}>
-        <div className={classes.filterStack}> Filters</div>
-        {/* Course Time Component*/}
-
-        <div>
-          <CourseTime value={courseTimes} setValue={setCourseTimes} />
+        <div className={classes.filterStack}>
+          <Typography sx={{ color: "#674EA7", fontWeight: 700 }}>
+            Filters
+          </Typography>
         </div>
 
-        {/* Course Level through the checkmarkDisp. componenet */}
-        <div>
+        {/* Course Times Filter*/}
+        <CollapsableFilter label={"Course Time"} open={openCourseTimeFilter} setOpen={setOpenCourseTimeFilter}>
+          <CourseTime
+            value={courseTimes}
+            setValue={setCourseTimes}
+          />
+        </CollapsableFilter>
+
+        {/* Course Levels Filter */}
+        <CollapsableFilter label={"Course Level"} open={openCourseLevelsFilter} setOpen={setOpenCourseLevelsFilter}>
           <CheckmarkDisplayer
             value={courseLevels}
             setValue={setCourseLevels}
-            headerText="Course Level"
             itemList={courseLevelList}
           />
-        </div>
+        </CollapsableFilter>
 
-        {/* Availability Component */}
-        <Availability
-          value={availability}
-          setValue={setAvailability}
-          defaultValue={AVAILABILITY_DEFAULT_VALUE}
-        />
 
-        {/* Course Component */}
-        <div>
+        {/* Availability Filter */}
+        <CollapsableFilter label={"Availability"} open={openAvailabilityFilter} setOpen={setOpenAvailabilityFilter}>
+          <Availability
+            value={availability}
+            setValue={setAvailability}
+            defaultValue={AVAILABILITY_DEFAULT_VALUE}
+            />
+        </CollapsableFilter>
+
+        {/* Course Days Filter */}
+        <CollapsableFilter label={"Course Days"} open={openCourseDaysFilter} setOpen={setOpenCourseDaysFilter}>
           <CheckmarkDisplayer
             value={courseDays}
             setValue={setCourseDays}
             headerText="Course Days"
             itemList={courseDayList}
           />
-        </div>
+        </CollapsableFilter>
 
-        {/* Credit Hours Component */}
-        <div>
+        {/* Credit Hours Filter */}
+        <CollapsableFilter label={"Credit Hours"} open={openCreditHoursFilter} setOpen={setOpenCreditHoursFilter}>
           <CheckmarkDisplayer
             value={creditHours}
             setValue={setCreditHours}
-            headerText="Credit Hours"
             itemList={creditHourList}
           />
-        </div>
+        </CollapsableFilter>
 
-        <Box sx={{ paddingTop: 2, alignSelf: "center" }}>
+        {/* Apply Filters Button*/}
+        <Box sx={{ paddingTop: 2, alignSelf: "end",  p: 1 }}>
           <Button
             size="small"
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", fontWeight: 700 }}
             variant="contained"
             onClick={handleApplyFilters}
           >

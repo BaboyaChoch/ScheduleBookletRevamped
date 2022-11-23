@@ -41,10 +41,6 @@ export default function CourseTime({ value, setValue }) {
 
   return (
     <Grid container direction="column" spacing={2}>
-      {/* Title - Course time */}
-      <Grid item xs>
-        <Typography sx={{ color: "#674EA7" }}> Course Time</Typography>
-      </Grid>
       {/* Body - Slider */}
       <Grid container item xs>
         <Grid item>
