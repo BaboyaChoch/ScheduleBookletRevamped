@@ -46,28 +46,36 @@ export default function App() {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [semesterYearKeyWord, setSemesterYearKeyword] = useState(null);
+  const [departmentKeyWord, setDepartmentKeyword] = useState(null);
 
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
-    console.log(theme);
+    // console.log(theme);
   });
 
   useEffect(() => {
-    console.log(
-      `CURRENT_THEME_MODE: ${theme.palette.mode}`,
-      `IS_DARK_MODE: ${isDarkMode}`
-    );
+    // console.log(
+    //   `CURRENT_THEME_MODE: ${theme.palette.mode}`,
+    //   `IS_DARK_MODE: ${isDarkMode}`
+    // );
     theme.palette.mode = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
+  // for debugging purposes, feel free to comment out
   useEffect(() => {
-    console.log("FILTERS_TO_APPLY: ",filters);
+    console.log("App.js| Filters: ",filters);
   }, [filters]);
+
+// for debugging purposes, feel free to comment out
+  useEffect(() => {
+    console.log("App.js| Semester/Year: ", semesterYearKeyWord, " Deparment: ", departmentKeyWord)
+  }, [departmentKeyWord, semesterYearKeyWord]);
 
   return (
     <div className={classes.root}>
-      <Grid container>
+      <Grid container spacing={3}>
         <Grid item sx={{width: '100%'}}>
           <NavBar />
         </Grid>
@@ -75,7 +83,12 @@ export default function App() {
           <Container maxWidth={"xl"}>
             <Grid container direction='column' spacing={2}>
               <Grid item sx={{ width: '100%'}}>
-                <SearchBar />
+                <SearchBar
+                  semesterValue={semesterYearKeyWord}
+                  setSemesterValue={setSemesterYearKeyword}
+                  departmentValue={departmentKeyWord}
+                  setDepartmentValue={setDepartmentKeyword}
+                />
               </Grid>
               <Grid container item>
                 <Grid item xs={2.25} className={classes.filters}>

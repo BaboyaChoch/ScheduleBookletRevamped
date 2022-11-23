@@ -5,68 +5,117 @@ import {
   Autocomplete,
   Typography,
   Button,
-  Grid,
+  Grid, Stack,
+  useMediaQuery,
 } from "@mui/material";
 
-export default function Search() {
-  return (
-    <Grid container sx={{}}>
-      <Grid item xs={4} sx={{ ml: 3, mt: 2, backgroundColor: "" }}>
-        <Typography fontWeight="bold" color="#674EA7">
-          Semester / Year{" "}
-        </Typography>
-      </Grid>
-      <Grid item xs={5} sx={{ mt: 2, backgroundColor: "" }}>
-        <Typography fontWeight="bold" color="#674EA7">
-          Department
-        </Typography>
-      </Grid>
+import {makeStyles} from "@mui/styles";
+const useStyles = makeStyles({
+  content: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+});
 
-      <Grid item xs={4} sx={{ backgroundColor: "" }}>
-        <Autocomplete
-          componentsProps={{ paper: { sx: { width: 250, margin: "auto" } } }}
-          disablePortal
-          id="auto-highlight"
-          size="small"
-          options={Semester}
-          noOptionsText="No Results"
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "15px",
-                  boxShadow: 1,
-                },
-              }}
-            />
-          )}
-        />
+export default function Search({semesterValue, setSemesterValue, departmentValue, setDepartmentValue}) {
+  const classes = useStyles();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+  const [showErrorHelperMessage, setShowErrorHelperMessage] = useState(false);
+
+  const handleSemesterYearInputChange = (event, value) => {
+    if (value !== '' || value.length > 1){
+      setSemesterValue(value)
+    } else{
+      setSemesterValue(null)
+    }
+  }
+
+  const handleDepartmentInputChange = (event, value) => {
+    if (value !== '' || value.length > 1){
+      setDepartmentValue(value)
+    } else {
+      setDepartmentValue(null)
+    }
+  }
+
+  const handleSearchCourses = () => {
+    if (semesterValue && departmentValue) {
+      setShowErrorHelperMessage(false)
+      // initiate search
+      alert("starting search.....")
+
+    } else{
+      setShowErrorHelperMessage(true)
+    }
+  }
+
+  return (
+    <Grid container direction={isSmallScreen ? 'column' : 'row'}>
+      <Grid className={classes.content} item xs={2.5} sx={{m: 2, marginLeft: 0}}>
+        <Stack>
+          <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
+            Semester / Year
+          </Typography>
+          <Autocomplete
+            componentsProps={{ paper: { sx: { width: 250, margin: "auto" } } }}
+            disablePortal
+            id="auto-highlight"
+            size="small"
+            options={Semester}
+            noOptionsText="No Options..="
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "15px",
+                    boxShadow: 1,
+                  },
+                }}
+              />
+            )}
+            onInputChange={handleSemesterYearInputChange}
+          />
+        </Stack>
       </Grid>
-      <Grid item xs={4} sx={{ backgroundColor: "" }}>
-        <Autocomplete
-          componentsProps={{ paper: { sx: { width: 350, margin: "auto" } } }}
-          disablePortal
-          id="auto-highlight"
-          size="small"
-          options={Department}
-          noOptionsText="No Results"
-          sx={{ width: 400 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "15px",
-                  boxShadow: 1,
-                },
-              }}
-            />
-          )}
-        />
+      <Grid className={classes.content} item xs={3.3} sx={{m: 2, marginLeft: isSmallScreen ? 0 : ''}}>
+        <Stack>
+          <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
+            Department
+          </Typography>
+          <Autocomplete
+            componentsProps={{ paper: { sx: { width: 350, margin: "auto" } } }}
+            disablePortal
+            id="auto-highlight"
+            size="small"
+            options={Department}
+            noOptionsText="No Options..="
+            sx={{ width: 400 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "15px",
+                    boxShadow: 1,
+                  },
+                }}
+              />
+            )}
+            onInputChange={handleDepartmentInputChange}
+
+          />
+        </Stack>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1.2} sx={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        m: 2,
+        marginLeft: isSmallScreen ? 0 : ''
+      }} >
         <Button
           variant="contained"
           sx={{
@@ -76,18 +125,29 @@ export default function Search() {
             fontWeight: "bold",
             backgroundColor: "#674EA7",
           }}
-          onClick
-          {...() => {
-            alert("clicked");
-          }}
+          onClick={handleSearchCourses}
         >
           Search Courses
         </Button>
+      </Grid>
+      <Grid item sx={{display: 'flex', alignItems: 'flex-end', marginLeft: isSmallScreen ? 0 : ''}}>
+        {
+          showErrorHelperMessage ?
+            <Typography sx={{color: '#d32f2f', p: isSmallScreen ? 0 : 1.3, m: 2, fontSize: 11, fontWeight: 500}}>
+              Make selection for both Semester/Year and Department
+            </Typography> : null
+        }
       </Grid>
     </Grid>
   );
 }
 
-const Semester = [{ label: "Spring 2023" }, { label: "Fall 2022" }];
+const Semester = [
+  { value: "Spring 2023" , label: "Spring 2023" },
+  { value: "Fall 2022", label: "Fall 2022" }
+];
 
-const Department = [{ label: "Art History" }, { label: "Computer Science" }];
+const Department = [
+  { value: "Art History", label: "Art History" },
+  { value: "Computer Science", label: "Computer Science" }
+];

@@ -29,9 +29,6 @@ export default function Availability({value, setValue, defaultValue}) {
   return (
     <Grid container direction="column" spacing={1}>
       <Grid item>
-        <Typography sx={{ color: "#674EA7" }}> Availability </Typography>
-      </Grid>
-      <Grid item>
         <RadioGroup defaultValue={defaultValue}>
           {availabilityOptions.map((element) => {
             return (

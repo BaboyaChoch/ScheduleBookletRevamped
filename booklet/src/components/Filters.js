@@ -13,7 +13,7 @@ import React from "react";
 import CourseTime from "./CourseTime";
 import CheckmarkDisplayer from "./CheckmarkDisplayer";
 import Availability from "./Availibility";
-import CollapsableFilter from "./CollapsableFilter";
+import CollapsableContainer from "./CollapsableContainer";
 
 const useStyles = makeStyles({
   root: {},
@@ -25,7 +25,6 @@ const useStyles = makeStyles({
     paddingTop: 3,
   },
   filterStack: {
-    paddingLeft: 5,
   },
 });
 
@@ -92,50 +91,50 @@ export default function Filters({ filters, setFilters }) {
         </div>
 
         {/* Course Times Filter*/}
-        <CollapsableFilter label={"Course Time"} open={openCourseTimeFilter} setOpen={setOpenCourseTimeFilter}>
+        <CollapsableContainer label={"Course Time"} open={openCourseTimeFilter} setOpen={setOpenCourseTimeFilter}>
           <CourseTime
             value={courseTimes}
             setValue={setCourseTimes}
           />
-        </CollapsableFilter>
+        </CollapsableContainer>
 
         {/* Course Levels Filter */}
-        <CollapsableFilter label={"Course Level"} open={openCourseLevelsFilter} setOpen={setOpenCourseLevelsFilter}>
+        <CollapsableContainer label={"Course Level"} open={openCourseLevelsFilter} setOpen={setOpenCourseLevelsFilter}>
           <CheckmarkDisplayer
             value={courseLevels}
             setValue={setCourseLevels}
             itemList={courseLevelList}
           />
-        </CollapsableFilter>
+        </CollapsableContainer>
 
 
         {/* Availability Filter */}
-        <CollapsableFilter label={"Availability"} open={openAvailabilityFilter} setOpen={setOpenAvailabilityFilter}>
+        <CollapsableContainer label={"Availability"} open={openAvailabilityFilter} setOpen={setOpenAvailabilityFilter}>
           <Availability
             value={availability}
             setValue={setAvailability}
             defaultValue={AVAILABILITY_DEFAULT_VALUE}
             />
-        </CollapsableFilter>
+        </CollapsableContainer>
 
         {/* Course Days Filter */}
-        <CollapsableFilter label={"Course Days"} open={openCourseDaysFilter} setOpen={setOpenCourseDaysFilter}>
+        <CollapsableContainer label={"Course Days"} open={openCourseDaysFilter} setOpen={setOpenCourseDaysFilter}>
           <CheckmarkDisplayer
             value={courseDays}
             setValue={setCourseDays}
             headerText="Course Days"
             itemList={courseDayList}
           />
-        </CollapsableFilter>
+        </CollapsableContainer>
 
         {/* Credit Hours Filter */}
-        <CollapsableFilter label={"Credit Hours"} open={openCreditHoursFilter} setOpen={setOpenCreditHoursFilter}>
+        <CollapsableContainer label={"Credit Hours"} open={openCreditHoursFilter} setOpen={setOpenCreditHoursFilter}>
           <CheckmarkDisplayer
             value={creditHours}
             setValue={setCreditHours}
             itemList={creditHourList}
           />
-        </CollapsableFilter>
+        </CollapsableContainer>
 
         {/* Apply Filters Button*/}
         <Box sx={{ paddingTop: 2, alignSelf: "end",  p: 1 }}>
