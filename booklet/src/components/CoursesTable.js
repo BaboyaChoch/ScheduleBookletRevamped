@@ -406,7 +406,6 @@ export default function CoursesTable() {
       setIsHeaderSortActive(false);
       if (!isSearchFilterActive) setFilteredRows([]);
       else {
-        console.log("IN ELSE", tempSearchFilterResults);
         setFilteredRows(tempSearchFilterResults);
       }
 
@@ -441,8 +440,8 @@ export default function CoursesTable() {
   }, [filteredRows]);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ padding: "5px 0px 5px" }}>
+    <Box sx={{ width: "100%"}}>
+      <Box sx={{marginBottom: 2}}>
         <Grid container>
           <Grid
             item
@@ -450,10 +449,10 @@ export default function CoursesTable() {
             sx={{
               display: "flex",
               justifyContent: "flex-start",
-              alignItems: "end",
+              alignItems: "flex-end",
             }}
           >
-            <Typography fontSize={12} fontWeight={700} color="primary">
+            <Typography fontWeight={500} color="primary">
               {isFilterActive && isSearchFilterActive
                 ? `Results for “${searchKeyword}” (${filteredRows.length} Courses)`
                 : "Results for “Fall 2022 Computer Science” (150 Courses)"}

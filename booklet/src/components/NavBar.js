@@ -10,7 +10,6 @@ const useStyles = makeStyles({
     root: {},
     logo:{
         height: 50,
-        paddingBottom:20,
     }
 })
 
