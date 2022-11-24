@@ -32,7 +32,7 @@ export default function CourseTime({ value, setValue }) {
 
   useEffect(() => {
     if ( startTime && endTime && ![startTime, endTime].includes("Invalid Date")) {
-      setValue([startTime.format("hh:mm A"), endTime.format("hh:mm A")]);
+      setValue([startTime, endTime]);
       setShowErrorHelperMessage(false)
     } else {
       setValue(null);

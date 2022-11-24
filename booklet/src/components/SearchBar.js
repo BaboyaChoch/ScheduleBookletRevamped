@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Search({semesterValue, setSemesterValue, departmentValue, setDepartmentValue}) {
+export default function Search({semesterValue, setSemesterValue, departmentValue, setDepartmentValue, setTotalCourses}) {
   const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
   const [showErrorHelperMessage, setShowErrorHelperMessage] = useState(false);
@@ -43,6 +43,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
     if (semesterValue && departmentValue) {
       setShowErrorHelperMessage(false)
       // initiate search
+      setTotalCourses(17)
       alert("starting search.....")
 
     } else{

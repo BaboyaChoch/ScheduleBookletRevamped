@@ -48,7 +48,8 @@ export default function App() {
   const [filters, setFilters] = useState(null);
   const [semesterYearKeyWord, setSemesterYearKeyword] = useState(null);
   const [departmentKeyWord, setDepartmentKeyword] = useState(null);
-
+  const [currentTableTotalResults, setCurrentTableTotalResults] = useState(null);
+  const [handleClearAllFilters, setHandleClearAllFilters] = useState( () => {})
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
@@ -66,7 +67,7 @@ export default function App() {
 
 // for debugging purposes, feel free to comment out
   useEffect(() => {
-    console.log("App.js| Semester/Year: ", semesterYearKeyWord, " Deparment: ", departmentKeyWord)
+
   }, [departmentKeyWord, semesterYearKeyWord]);
 
   return (
@@ -84,11 +85,16 @@ export default function App() {
                   setSemesterValue={setSemesterYearKeyword}
                   departmentValue={departmentKeyWord}
                   setDepartmentValue={setDepartmentKeyword}
+                  setTotalCourses={setCurrentTableTotalResults}
                 />
               </Grid>
               <Grid container item>
                 <Grid item xs={2.25} className={classes.filters}>
-                  <Filters filters={filters} setFilters={setFilters} />
+                  <Filters
+                    filters={filters}
+                    setFilters={setFilters}
+                    setClearFiltersHandler={setHandleClearAllFilters}
+                  />
                 </Grid>
                 <Grid item xs={0.25} display="flex" justifyContent="center">
                   <Divider
@@ -97,7 +103,16 @@ export default function App() {
                   />
                 </Grid>
                 <Grid item container xs={9.5} className={classes.table}>
-                  <CoursesTable sidebarFilters={filters} setSidebarFilters={setFilters}/>
+                  <CoursesTable
+                    sidebarFilters={filters}
+                    setSidebarFilters={setFilters}
+                    onClearFilters={handleClearAllFilters}
+                    totalCourses={currentTableTotalResults ? currentTableTotalResults : 150}
+                    currentTableSemesterYear={semesterYearKeyWord ? semesterYearKeyWord : 'Fall' +
+                      ' 2022'}
+                    currentTableDepartment={departmentKeyWord ? departmentKeyWord : 'Computer' +
+                      ' Science'}
+                  />
                 </Grid>
               </Grid>
             </Grid>

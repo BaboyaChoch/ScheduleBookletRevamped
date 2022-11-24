@@ -126,7 +126,7 @@ export default function AlertAddClassWithLabModal({
                 sx={{ paddingBottom: 1 }}
               >
                 <Grid item>
-                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                  <Box boxShadow={1} sx={{ borderRadius: 15,  height: 'fit-content' }}>
                     <Button
                       className={classes.modalActionsButtons}
                       variant="contained"
@@ -142,7 +142,7 @@ export default function AlertAddClassWithLabModal({
                 </Grid>
                 <Grid item xs={0.2} />
                 <Grid item>
-                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                  <Box boxShadow={1} sx={{ borderRadius: 15, height: 'fit-content' }}>
                     <Button
                       className={classes.modalActionsButtons}
                       variant="contained"

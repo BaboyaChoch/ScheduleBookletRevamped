@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
   Box,
   Stack,
@@ -56,7 +56,7 @@ const creditHourList = [
   { id: 6, label: "Other", checked: false },
 ];
 
-export default function Filters({ filters, setFilters }) {
+export default function Filters({ filters, setFilters, setClearFiltersHandler }) {
   const classes = useStyles();
   const [courseTimes, setCourseTimes] = useState(null);
 
@@ -83,6 +83,19 @@ export default function Filters({ filters, setFilters }) {
       credit_hours: JSON.stringify(creditHours) === JSON.stringify(creditHourList) ? null : creditHours,
     })
   };
+
+  const resetAllFilterSidebarOptions = () => {
+    setCourseTimes(null)
+    setAvailability(null);
+    setCourseLevels(JSON.parse(JSON.stringify(courseLevelList)))
+    setCourseDays(JSON.parse(JSON.stringify(courseDayList)))
+    setCreditHours(JSON.parse(JSON.stringify(creditHourList)))
+    handleApplyFilters();
+  }
+
+  useEffect( () => {
+    setClearFiltersHandler(() => resetAllFilterSidebarOptions);
+  },[])
 
   return (
     <Box sx={{ width: "100%" }}>
