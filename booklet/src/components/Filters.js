@@ -28,6 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
+// careful when changing {id} value, it is used in handleSidebarFilters in CoursesTable.js
 const courseLevelList = [
   { id: 1, label: "1000 Level", checked: false },
   { id: 2, label: "2000 Level", checked: false },
@@ -36,6 +37,7 @@ const courseLevelList = [
   { id: 5, label: "5000+ Level", checked: false },
 ];
 
+// careful when changing {label} value, it is used in handleSidebarFilters in CoursesTable.js
 const courseDayList = [
   { id: 1, label: "M", checked: false },
   { id: 2, label: "T", checked: false },
@@ -44,6 +46,7 @@ const courseDayList = [
   { id: 5, label: "F", checked: false },
 ];
 
+// careful when changing {label} value, it is used in handleSidebarFilters in CoursesTable.js
 const creditHourList = [
   { id: 1, label: 1.0, checked: false },
   { id: 2, label: 2.0, checked: false },
@@ -80,7 +83,7 @@ export default function Filters({ filters, setFilters }) {
       credit_hours: JSON.stringify(creditHours) === JSON.stringify(creditHourList) ? null : creditHours,
     })
   };
-// border: '1px solid red',
+
   return (
     <Box sx={{ width: "100%" }}>
       <Stack divider={<Divider />} spacing={1}>

@@ -63,10 +63,6 @@ export default function App() {
     theme.palette.mode = isDarkMode ? "dark" : "light";
   }, [isDarkMode]);
 
-  // for debugging purposes, feel free to comment out
-  useEffect(() => {
-    console.log("App.js| Filters: ",filters);
-  }, [filters]);
 
 // for debugging purposes, feel free to comment out
   useEffect(() => {
@@ -101,7 +97,7 @@ export default function App() {
                   />
                 </Grid>
                 <Grid item container xs={9.5} className={classes.table}>
-                  <CoursesTable />
+                  <CoursesTable sidebarFilters={filters} setSidebarFilters={setFilters}/>
                 </Grid>
               </Grid>
             </Grid>

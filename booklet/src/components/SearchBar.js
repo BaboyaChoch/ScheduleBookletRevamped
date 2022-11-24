@@ -52,7 +52,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
 
   return (
     <Grid container direction={isSmallScreen ? 'column' : 'row'}>
-      <Grid className={classes.content} item xs={2.5} sx={{m: 2, marginLeft: 0}}>
+      <Grid className={classes.content} item xs={2.5} sx={{m: 2, marginLeft: 0, marginRight: 12}}>
         <Stack>
           <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
             Semester / Year
@@ -80,7 +80,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
           />
         </Stack>
       </Grid>
-      <Grid className={classes.content} item xs={3.3} sx={{m: 2, marginLeft: isSmallScreen ? 0 : ''}}>
+      <Grid className={classes.content} item xs={3.3} sx={{m: 2, marginLeft: isSmallScreen ? 0 : '', marginRight: 12}}>
         <Stack>
           <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
             Department

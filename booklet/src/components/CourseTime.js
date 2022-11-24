@@ -64,8 +64,8 @@ export default function CourseTime({ value, setValue }) {
               // we make an assumption that no class begins before 6:30AM
               minTime={dayjs("06:29:00", "HH:mm:ss")}
 
-              // we make an assumption that the latest start time is 9:30PM
-              maxTime={dayjs("21:29:00", "HH:mm:ss")}
+              // we make an assumption that the latest start time is 8:30PM
+              maxTime={dayjs("20:29:00", "HH:mm:ss")}
 
               renderInput={(params) => <TextField {...params} />}
             />
@@ -90,10 +90,11 @@ export default function CourseTime({ value, setValue }) {
               minTime={startTime ? startTime.add(1, 'hours') : dayjs("07:29:00", "HH:mm:ss")}
 
               /*
-              * we make another assumption that every class ends by 10:30PM, the latest end time is 10:30PM
-              * which is an hour after our assumed latest start time of 9:30PM
+              * we make another assumption that every class ends by 9:30PM, the latest end time
+              *  is 9:30PM
+              * which is an hour after our assumed latest start time of 8:30PM
               */
-              maxTime={dayjs("22:29:00", "HH:mm:ss")}
+              maxTime={dayjs("21:29:00", "HH:mm:ss")}
 
               renderInput={(params) => <TextField {...params} />}
             />
