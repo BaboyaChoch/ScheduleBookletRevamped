@@ -15,8 +15,8 @@ import React from "react";
 * undefined : all_courses
 */
 const availabilityOptions = [
-  { value: false, label: "Full Courses" },
-  { value: true, label: "Not Full Courses" },
+  { value: "FULL_COURSES", label: "Full Courses" },
+  { value: "NON_FULL_COURSES", label: "Not Full Courses" },
   { value: "ALL_COURSES", label: "All Courses" },
 ];
 

@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Search({semesterValue, setSemesterValue, departmentValue, setDepartmentValue}) {
+export default function Search({semesterValue, setSemesterValue, departmentValue, setDepartmentValue, setTotalCourses}) {
   const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('xl'));
   const [showErrorHelperMessage, setShowErrorHelperMessage] = useState(false);
@@ -43,6 +43,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
     if (semesterValue && departmentValue) {
       setShowErrorHelperMessage(false)
       // initiate search
+      setTotalCourses(17)
       alert("starting search.....")
 
     } else{
@@ -52,7 +53,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
 
   return (
     <Grid container direction={isSmallScreen ? 'column' : 'row'}>
-      <Grid className={classes.content} item xs={2.5} sx={{m: 2, marginLeft: 0}}>
+      <Grid className={classes.content} item xs={2.5} sx={{m: 2, marginLeft: 0, marginRight: 12}}>
         <Stack>
           <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
             Semester / Year
@@ -80,7 +81,7 @@ export default function Search({semesterValue, setSemesterValue, departmentValue
           />
         </Stack>
       </Grid>
-      <Grid className={classes.content} item xs={3.3} sx={{m: 2, marginLeft: isSmallScreen ? 0 : ''}}>
+      <Grid className={classes.content} item xs={3.3} sx={{m: 2, marginLeft: isSmallScreen ? 0 : '', marginRight: 12}}>
         <Stack>
           <Typography fontWeight="bold" color="#674EA7" sx={{m: 1}}>
             Department

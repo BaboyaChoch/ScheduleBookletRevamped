@@ -37,14 +37,10 @@ const useStyles = makeStyles({
     boxShadow: 24,
     p: 4,
   },
-  center: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  center: {},
 });
 
-export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
+export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
   const [openMoreInfo, setOpenMoreInfo] = useState(false);
   const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
   const [courseNotAddableReason, setCourseNotAddableReason] =
@@ -58,7 +54,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
     moreInfo.isMajorsOnly === true ||
     row.courseName.toUpperCase().includes("MJRS");
 
-  const LabeledText = ({ label, info }) => {
+  const LabeledText = ({label, info}) => {
     label = MORE_INFO_LABEL_MAP[label];
     return (
       <Box
@@ -73,26 +69,26 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
             <Typography
               gutterBottom
               component="div"
-              sx={{ fontSize: 12, fontWeight: 700 }}
+              sx={{fontSize: 12, fontWeight: 700}}
             >
               {`${label}`}&nbsp;
             </Typography>
           </Grid>
-          <Grid item xs={labInfo ? 0.25 : 0} />
+          <Grid item xs={labInfo ? 0.25 : 0}/>
           <Grid
             item
             xs={labInfo ? 10.7 : 10.95}
-            sx={{ display: "flex", alignItems: "center" }}
+            sx={{display: "flex", alignItems: "center"}}
           >
             <Typography
               gutterBottom
               component="div"
-              sx={{ fontSize: 10, fontWeight: 500 }}
+              sx={{fontSize: 10, fontWeight: 500}}
             >
               {info ? info : `No ${label} Available`}
             </Typography>
           </Grid>
-          <Grid item xs={0.05} />
+          <Grid item xs={0.05}/>
         </Grid>
       </Box>
     );
@@ -124,8 +120,8 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
 
   const getNotAddableToolTipIcon = () => {
     if (courseNotAddableReason === CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED)
-      return <CheckCircleIcon sx={{ fontSize: 15, color: "#66BB6A" }} />;
-    else return <InfoIcon sx={{ fontSize: 15, color: "red" }} />;
+      return <CheckCircleIcon sx={{fontSize: 15, color: "#66BB6A"}}/>;
+    else return <InfoIcon sx={{fontSize: 15, color: "red"}}/>;
   };
 
   useEffect(() => {
@@ -157,14 +153,14 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
     <>
       <TableRow
         sx={{
-          "& > *": { border: ".5px solid lightgrey", width: "fit-content" },
+          "& > *": {border: ".5px solid lightgrey", width: "fit-content"},
         }}
       >
         {Object.entries(row).map((data, index) => {
           const rowContent = data[1];
           if (index + 1 < Object.entries(row).length) {
             return (
-              <TableCell className={classes.rowCell} align="center" key={index}>
+              <TableCell sx={{p: 0}} align="center" key={index}>
                 <Typography fontSize={11} fontWeight={500}>
                   {rowContent}
                 </Typography>
@@ -177,10 +173,9 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
             <Grid
               item
               xs={5.5}
-              xl={5.5}
               className={isSmallScreen ? classes.center : ""}
             >
-              <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+              <Box boxShadow={1} sx={{borderRadius: 15, height: 'fit-content', width: 'fit-content'}}>
                 <Button
                   className={classes.actionButtons}
                   variant="contained"
@@ -193,13 +188,12 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                 </Button>
               </Box>
             </Grid>
-            <Grid item xs={1} />
+            <Grid item xs={.2}/>
             <Grid
               className={isSmallScreen ? classes.center : ""}
               item
               container
               xs={5.5}
-              xl={5.5}
               direction="row"
               flexWrap="nowrap"
             >
@@ -207,7 +201,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                 {isSmallScreen && isNotAddable ? (
                   ""
                 ) : (
-                  <Box boxShadow={1} sx={{ borderRadius: 15 }}>
+                  <Box boxShadow={1} sx={{borderRadius: 15, height: 'fit-content'}}>
                     <Button
                       className={classes.actionButtons}
                       variant="contained"
@@ -216,14 +210,24 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                       onClick={() => handleOnAddClass()}
                       color="success"
                       disabled={isNotAddable || (openMoreInfo && labInfo)}
-                      sx={{ color: "white" }}
+                      sx={{color: "white"}}
                     >
                       Add Class
                     </Button>
                   </Box>
                 )}
               </Grid>
-              <Grid item sx={{ display: "flex", alignItems: "center" }}>
+              <Grid
+                item
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: isSmallScreen ? 0 : 1,
+                  marginTop:  isSmallScreen ? .2 : 0,
+                  justifyContent: 'center',
+                  width: '100%'
+                }}
+              >
                 {isNotAddable ? (
                   <Tooltip title={courseNotAddableReason}>
                     {getNotAddableToolTipIcon()}
@@ -237,7 +241,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
+        <TableCell sx={{paddingBottom: 0, paddingTop: 0}} colSpan={12}>
           <Collapse in={openMoreInfo} timeout="auto" unmountOnExit>
             <Box className={classes.moreInfoCont}>
               <Grid container direction="column">
@@ -255,7 +259,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                       <Typography
                         gutterBottom
                         component="div"
-                        sx={{ fontSize: 14, fontWeight: 700 }}
+                        sx={{fontSize: 14, fontWeight: 700}}
                       >
                         More Info&nbsp;
                       </Typography>
@@ -316,7 +320,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                   {labInfo ? (
                     <>
                       {" "}
-                      <Grid item xs={0.1} />
+                      <Grid item xs={0.1}/>
                       <Grid item xs={3.4}>
                         <MiniCoursesTable
                           isLab
@@ -334,7 +338,7 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                   ) : (
                     ""
                   )}
-                  <Grid item xs={0.1} />
+                  <Grid item xs={0.1}/>
                   <Grid
                     item
                     container
@@ -345,16 +349,16 @@ export default function CoursesRow({ row, isAdded, labInfo, moreInfo }) {
                       if (label != "specialEnrollment") {
                         return (
                           <Grid key={index} item>
-                            <LabeledText label={label} info={info} />
+                            <LabeledText label={label} info={info}/>
                           </Grid>
                         );
                       }
                     })}
                   </Grid>
                 </Grid>
-                <Grid item sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Grid item sx={{display: "flex", justifyContent: "flex-end"}}>
                   {labInfo ? (
-                    <Box boxShadow={1} sx={{ borderRadius: 15, m: 1 }}>
+                    <Box boxShadow={1} sx={{borderRadius: 15, m: 1, height: 'fit-content'}}>
                       <Button
                         variant="contained"
                         aria-label="expand row"
