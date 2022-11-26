@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   root: {},
   schedule: {
     width: 577,
-    height: 'fit-content',
+    height: "fit-content",
     position: "fixed",
     bottom: 0,
     right: 10,
