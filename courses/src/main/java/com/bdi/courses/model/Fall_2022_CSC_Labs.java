@@ -6,28 +6,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "Fall_2022_CSC_Labs")
 public class Fall_2022_CSC_Labs {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String type;
-    
+
     private String labtime;
-    
+
     private String labdays;
-    
+
     private String labinstructor;
-    
+
     private int keey;
-    
+
     public Fall_2022_CSC_Labs() {
     }
-    
+
     public Fall_2022_CSC_Labs(String type, String labtime, String labdays, String labinstructor, int keey) {
         super();
         this.type = type;

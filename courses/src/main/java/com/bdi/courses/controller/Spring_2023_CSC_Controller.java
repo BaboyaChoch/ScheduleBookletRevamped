@@ -62,6 +62,7 @@ public class Spring_2023_CSC_Controller {
          existingSpring_2023_CSC.setEnrollment(spring_2023_CSC.getEnrollment());
          existingSpring_2023_CSC.setInstructor(spring_2023_CSC.getInstructor());
          existingSpring_2023_CSC.setKeey(spring_2023_CSC.getKeey());
+         existingSpring_2023_CSC.setLab(spring_2023_CSC.isLab());
          existingSpring_2023_CSC.setLabhash(spring_2023_CSC.getLabhash());
          existingSpring_2023_CSC.setMoreinfo(spring_2023_CSC.getMoreinfo());
          existingSpring_2023_CSC.setNotes(spring_2023_CSC.getNotes());

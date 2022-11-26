@@ -17,13 +17,10 @@ import com.bdi.courses.exception.ResourceNotFoundException;
 import com.bdi.courses.model.Spring_2023_CSC_Labs;
 import com.bdi.courses.repository.Spring_2023_CSC_Labs_Repository;
 
-
-
 @RestController
 @RequestMapping("/Spring_2023_CSC_Labs")
 public class Spring_2023_CSC_Labs_Controller {
 
-    
     @Autowired
     private Spring_2023_CSC_Labs_Repository spring_2023_CSC_LabsRepository;
 
@@ -35,9 +32,10 @@ public class Spring_2023_CSC_Labs_Controller {
 
     // get spring_2023_CSC_Labs by id
     @GetMapping("/{id}")
-    public Spring_2023_CSC_Labs getSpring_2023_CSC_LabsById(@PathVariable (value = "id") long spring_2023_CSC_LabsId) {
+    public Spring_2023_CSC_Labs getSpring_2023_CSC_LabsById(@PathVariable(value = "id") long spring_2023_CSC_LabsId) {
         return this.spring_2023_CSC_LabsRepository.findById(spring_2023_CSC_LabsId)
-                .orElseThrow(() -> new ResourceNotFoundException("Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
     }
 
     // create spring_2023_CSC_Labs
@@ -45,26 +43,32 @@ public class Spring_2023_CSC_Labs_Controller {
     public Spring_2023_CSC_Labs createSpring_2023_CSC_Labs(@RequestBody Spring_2023_CSC_Labs spring_2023_CSC_Labs) {
         return this.spring_2023_CSC_LabsRepository.save(spring_2023_CSC_Labs);
     }
-    
+
     // update spring_2023_CSC_Labs
     @PutMapping("/{id}")
-    public Spring_2023_CSC_Labs updateSpring_2023_CSC_Labs(@RequestBody Spring_2023_CSC_Labs spring_2023_CSC_Labs, @PathVariable ("id") long spring_2023_CSC_LabsId) {
-         Spring_2023_CSC_Labs existingSpring_2023_CSC_Labs = this.spring_2023_CSC_LabsRepository.findById(spring_2023_CSC_LabsId)
-            .orElseThrow(() -> new ResourceNotFoundException("Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
-         existingSpring_2023_CSC_Labs.setKeey(spring_2023_CSC_Labs.getKeey());
-         existingSpring_2023_CSC_Labs.setLabdays(spring_2023_CSC_Labs.getLabdays());
-         existingSpring_2023_CSC_Labs.setLabinstructor(spring_2023_CSC_Labs.getLabinstructor());
-         existingSpring_2023_CSC_Labs.setLabtime(spring_2023_CSC_Labs.getLabtime());
-         existingSpring_2023_CSC_Labs.setType(spring_2023_CSC_Labs.getType());
-         return this.spring_2023_CSC_LabsRepository.save(existingSpring_2023_CSC_Labs);
+    public Spring_2023_CSC_Labs updateSpring_2023_CSC_Labs(@RequestBody Spring_2023_CSC_Labs spring_2023_CSC_Labs,
+            @PathVariable("id") long spring_2023_CSC_LabsId) {
+        Spring_2023_CSC_Labs existingSpring_2023_CSC_Labs = this.spring_2023_CSC_LabsRepository
+                .findById(spring_2023_CSC_LabsId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
+        existingSpring_2023_CSC_Labs.setKeey(spring_2023_CSC_Labs.getKeey());
+        existingSpring_2023_CSC_Labs.setLabdays(spring_2023_CSC_Labs.getLabdays());
+        existingSpring_2023_CSC_Labs.setLabinstructor(spring_2023_CSC_Labs.getLabinstructor());
+        existingSpring_2023_CSC_Labs.setLabtime(spring_2023_CSC_Labs.getLabtime());
+        existingSpring_2023_CSC_Labs.setType(spring_2023_CSC_Labs.getType());
+        return this.spring_2023_CSC_LabsRepository.save(existingSpring_2023_CSC_Labs);
     }
-    
+
     // delete spring_2023_CSC_Labs by id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Spring_2023_CSC_Labs> deleteSpring_2023_CSC_Labs(@PathVariable ("id") long spring_2023_CSC_LabsId){
-         Spring_2023_CSC_Labs existingSpring_2023_CSC_Labs = this.spring_2023_CSC_LabsRepository.findById(spring_2023_CSC_LabsId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
-         this.spring_2023_CSC_LabsRepository.delete(existingSpring_2023_CSC_Labs);
-         return ResponseEntity.ok().build();
+    public ResponseEntity<Spring_2023_CSC_Labs> deleteSpring_2023_CSC_Labs(
+            @PathVariable("id") long spring_2023_CSC_LabsId) {
+        Spring_2023_CSC_Labs existingSpring_2023_CSC_Labs = this.spring_2023_CSC_LabsRepository
+                .findById(spring_2023_CSC_LabsId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
+        this.spring_2023_CSC_LabsRepository.delete(existingSpring_2023_CSC_Labs);
+        return ResponseEntity.ok().build();
     }
 }
