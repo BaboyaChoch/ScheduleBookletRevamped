@@ -17,13 +17,10 @@ import com.bdi.courses.exception.ResourceNotFoundException;
 import com.bdi.courses.model.Fall_2022_CSC_Labs;
 import com.bdi.courses.repository.Fall_2022_CSC_Labs_Repository;
 
-
-
 @RestController
 @RequestMapping("/Fall_2022_CSC_Labs")
 public class Fall_2022_CSC_Labs_Controller {
 
-    
     @Autowired
     private Fall_2022_CSC_Labs_Repository fall_2022_CSC_LabsRepository;
 
@@ -35,9 +32,10 @@ public class Fall_2022_CSC_Labs_Controller {
 
     // get fall_2022_CSC_Labs by id
     @GetMapping("/{id}")
-    public Fall_2022_CSC_Labs getFall_2022_CSC_LabsById(@PathVariable (value = "id") long fall_2022_CSC_LabsId) {
+    public Fall_2022_CSC_Labs getFall_2022_CSC_LabsById(@PathVariable(value = "id") long fall_2022_CSC_LabsId) {
         return this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
-                .orElseThrow(() -> new ResourceNotFoundException("Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
     }
 
     // create fall_2022_CSC_Labs
@@ -45,26 +43,29 @@ public class Fall_2022_CSC_Labs_Controller {
     public Fall_2022_CSC_Labs createFall_2022_CSC_Labs(@RequestBody Fall_2022_CSC_Labs fall_2022_CSC_Labs) {
         return this.fall_2022_CSC_LabsRepository.save(fall_2022_CSC_Labs);
     }
-    
+
     // update fall_2022_CSC_Labs
     @PutMapping("/{id}")
-    public Fall_2022_CSC_Labs updateFall_2022_CSC_Labs(@RequestBody Fall_2022_CSC_Labs fall_2022_CSC_Labs, @PathVariable ("id") long fall_2022_CSC_LabsId) {
-         Fall_2022_CSC_Labs existingFall_2022_CSC_Labs = this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
-            .orElseThrow(() -> new ResourceNotFoundException("Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
-         existingFall_2022_CSC_Labs.setKeey(fall_2022_CSC_Labs.getKeey());
-         existingFall_2022_CSC_Labs.setLabdays(fall_2022_CSC_Labs.getLabdays());
-         existingFall_2022_CSC_Labs.setLabinstructor(fall_2022_CSC_Labs.getLabinstructor());
-         existingFall_2022_CSC_Labs.setLabtime(fall_2022_CSC_Labs.getLabtime());
-         existingFall_2022_CSC_Labs.setType(fall_2022_CSC_Labs.getType());
-         return this.fall_2022_CSC_LabsRepository.save(existingFall_2022_CSC_Labs);
+    public Fall_2022_CSC_Labs updateFall_2022_CSC_Labs(@RequestBody Fall_2022_CSC_Labs fall_2022_CSC_Labs,
+            @PathVariable("id") long fall_2022_CSC_LabsId) {
+        Fall_2022_CSC_Labs existingFall_2022_CSC_Labs = this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
+        existingFall_2022_CSC_Labs.setKeey(fall_2022_CSC_Labs.getKeey());
+        existingFall_2022_CSC_Labs.setLabdays(fall_2022_CSC_Labs.getLabdays());
+        existingFall_2022_CSC_Labs.setLabinstructor(fall_2022_CSC_Labs.getLabinstructor());
+        existingFall_2022_CSC_Labs.setLabtime(fall_2022_CSC_Labs.getLabtime());
+        existingFall_2022_CSC_Labs.setType(fall_2022_CSC_Labs.getType());
+        return this.fall_2022_CSC_LabsRepository.save(existingFall_2022_CSC_Labs);
     }
-    
+
     // delete fall_2022_CSC_Labs by id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Fall_2022_CSC_Labs> deleteFall_2022_CSC_Labs(@PathVariable ("id") long fall_2022_CSC_LabsId){
-         Fall_2022_CSC_Labs existingFall_2022_CSC_Labs = this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
-         this.fall_2022_CSC_LabsRepository.delete(existingFall_2022_CSC_Labs);
-         return ResponseEntity.ok().build();
+    public ResponseEntity<Fall_2022_CSC_Labs> deleteFall_2022_CSC_Labs(@PathVariable("id") long fall_2022_CSC_LabsId) {
+        Fall_2022_CSC_Labs existingFall_2022_CSC_Labs = this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
+        this.fall_2022_CSC_LabsRepository.delete(existingFall_2022_CSC_Labs);
+        return ResponseEntity.ok().build();
     }
 }
