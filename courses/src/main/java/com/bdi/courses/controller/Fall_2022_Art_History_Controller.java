@@ -63,11 +63,10 @@ public class Fall_2022_Art_History_Controller {
         existingFall_2022_Art_History.setDescription(fall_2022_Art_History.getDescription());
         existingFall_2022_Art_History.setEnrollment(fall_2022_Art_History.getEnrollment());
         existingFall_2022_Art_History.setInstructor(fall_2022_Art_History.getInstructor());
-        existingFall_2022_Art_History.setKeey(fall_2022_Art_History.getKeey());
-        existingFall_2022_Art_History.setLabhash(fall_2022_Art_History.getLabhash());
         existingFall_2022_Art_History.setMoreinfo(fall_2022_Art_History.getMoreinfo());
         existingFall_2022_Art_History.setNotes(fall_2022_Art_History.getNotes());
         existingFall_2022_Art_History.setPrereqs(fall_2022_Art_History.getPrereqs());
+        existingFall_2022_Art_History.setLab(fall_2022_Art_History.isLab());
         existingFall_2022_Art_History.setSection(fall_2022_Art_History.getSection());
         existingFall_2022_Art_History.setSpecialenrollment(fall_2022_Art_History.getSpecialenrollment());
         existingFall_2022_Art_History.setTime(fall_2022_Art_History.getTime());

@@ -14,23 +14,21 @@ public class Spring_2023_CSC {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int availability;
-    private int enrollment;
+    private String availability;
+    private String enrollment;
     private String coursenum;
     private String coursename;
     private String type;
-    private int section;
-    private int credits;
+    private String section;
+    private String credits;
     private String time;
     private String days;
     private String building;
     private String instructor;
     private String moreinfo;
     private String specialenrollment;
-    private int keey;
     @OneToOne
     private Spring_2023_CSC_Labs lab;
-    private int labhash;
     private String prereqs;
     private String notes;
     private String description;
@@ -39,10 +37,10 @@ public class Spring_2023_CSC {
 
     }
 
-    public Spring_2023_CSC(int availability, int enrollment, String coursenum, String coursename, String type,
-            int section,
-            int credits, String time, String days, String building, String instructor, String moreinfo,
-            String specialenrollment, int keey, Spring_2023_CSC_Labs lab, int labhash, String prereqs, String notes,
+    public Spring_2023_CSC(String availability, String enrollment, String coursenum, String coursename, String type,
+            String section,
+            String credits, String time, String days, String building, String instructor, String moreinfo,
+            String specialenrollment, Spring_2023_CSC_Labs lab, String prereqs, String notes,
             String description) {
         super();
         this.availability = availability;
@@ -58,8 +56,6 @@ public class Spring_2023_CSC {
         this.instructor = instructor;
         this.moreinfo = moreinfo;
         this.specialenrollment = specialenrollment;
-        this.keey = keey;
-        this.labhash = labhash;
         this.lab = lab;
         this.prereqs = prereqs;
         this.notes = notes;
@@ -74,19 +70,19 @@ public class Spring_2023_CSC {
         this.id = id;
     }
 
-    public int getAvailability() {
+    public String getAvailability() {
         return availability;
     }
 
-    public void setAvailability(int availability) {
+    public void setAvailability(String availability) {
         this.availability = availability;
     }
 
-    public int getEnrollment() {
+    public String getEnrollment() {
         return enrollment;
     }
 
-    public void setEnrollment(int enrollment) {
+    public void setEnrollment(String enrollment) {
         this.enrollment = enrollment;
     }
 
@@ -114,19 +110,19 @@ public class Spring_2023_CSC {
         this.type = type;
     }
 
-    public int getSection() {
+    public String getSection() {
         return section;
     }
 
-    public void setSection(int section) {
+    public void setSection(String section) {
         this.section = section;
     }
 
-    public int getCredits() {
+    public String getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(String credits) {
         this.credits = credits;
     }
 
@@ -178,28 +174,12 @@ public class Spring_2023_CSC {
         this.specialenrollment = specialenrollment;
     }
 
-    public int getKeey() {
-        return keey;
-    }
-
-    public void setKeey(int keey) {
-        this.keey = keey;
-    }
-
     public Spring_2023_CSC_Labs isLab() {
         return lab;
     }
 
     public void setLab(Spring_2023_CSC_Labs lab) {
         this.lab = lab;
-    }
-
-    public int getLabhash() {
-        return labhash;
-    }
-
-    public void setLabhash(int labhash) {
-        this.labhash = labhash;
     }
 
     public String getPrereqs() {

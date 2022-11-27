@@ -59,9 +59,7 @@ public class Fall_2022_CSC_Controller {
         existingFall_2022_CSC.setDescription(fall_2022_CSC.getDescription());
         existingFall_2022_CSC.setEnrollment(fall_2022_CSC.getEnrollment());
         existingFall_2022_CSC.setInstructor(fall_2022_CSC.getInstructor());
-        existingFall_2022_CSC.setKeey(fall_2022_CSC.getKeey());
         existingFall_2022_CSC.setLab(fall_2022_CSC.isLab());
-        existingFall_2022_CSC.setLabhash(fall_2022_CSC.getLabhash());
         existingFall_2022_CSC.setMoreinfo(fall_2022_CSC.getMoreinfo());
         existingFall_2022_CSC.setNotes(fall_2022_CSC.getNotes());
         existingFall_2022_CSC.setPrereqs(fall_2022_CSC.getPrereqs());
