@@ -25,7 +25,7 @@ public class Spring_2023_CSC_Labs_Controller {
     private Spring_2023_CSC_Labs_Repository spring_2023_CSC_LabsRepository;
 
     // get all spring_2023_CSC_Labss
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Spring_2023_CSC_Labs> getAllSpring_2023_CSC_Labss() {
         return this.spring_2023_CSC_LabsRepository.findAll();
     }

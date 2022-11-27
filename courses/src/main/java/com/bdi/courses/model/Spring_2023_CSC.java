@@ -15,11 +15,11 @@ public class Spring_2023_CSC {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String availability;
-    private String enrollment;
+    private int enrollment;
     private String coursenum;
     private String coursename;
     private String type;
-    private String section;
+    private int section;
     private String credits;
     private String time;
     private String days;
@@ -37,8 +37,8 @@ public class Spring_2023_CSC {
 
     }
 
-    public Spring_2023_CSC(String availability, String enrollment, String coursenum, String coursename, String type,
-            String section,
+    public Spring_2023_CSC(String availability, int enrollment, String coursenum, String coursename, String type,
+            int section,
             String credits, String time, String days, String building, String instructor, String moreinfo,
             String specialenrollment, Spring_2023_CSC_Labs lab, String prereqs, String notes,
             String description) {
@@ -78,11 +78,11 @@ public class Spring_2023_CSC {
         this.availability = availability;
     }
 
-    public String getEnrollment() {
+    public int getEnrollment() {
         return enrollment;
     }
 
-    public void setEnrollment(String enrollment) {
+    public void setEnrollment(int enrollment) {
         this.enrollment = enrollment;
     }
 
@@ -110,11 +110,11 @@ public class Spring_2023_CSC {
         this.type = type;
     }
 
-    public String getSection() {
+    public int getSection() {
         return section;
     }
 
-    public void setSection(String section) {
+    public void setSection(int section) {
         this.section = section;
     }
 
@@ -174,7 +174,7 @@ public class Spring_2023_CSC {
         this.specialenrollment = specialenrollment;
     }
 
-    public Spring_2023_CSC_Labs isLab() {
+    public Spring_2023_CSC_Labs getLab() {
         return lab;
     }
 
