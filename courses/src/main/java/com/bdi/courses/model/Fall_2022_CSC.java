@@ -15,11 +15,11 @@ public class Fall_2022_CSC {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String availability;
-    private String enrollment;
+    private int enrollment;
     private String coursenum;
     private String coursename;
     private String type;
-    private String section;
+    private int section;
     private String credits;
     private String time;
     private String days;
@@ -27,7 +27,6 @@ public class Fall_2022_CSC {
     private String instructor;
     private String moreinfo;
     private String specialenrollment;
-    private String keey;
     @OneToOne
     private Fall_2022_CSC_Labs lab;
     private String prereqs;
@@ -38,10 +37,10 @@ public class Fall_2022_CSC {
 
     }
 
-    public Fall_2022_CSC(String availability, String enrollment, String coursenum, String coursename, String type,
-            String section,
+    public Fall_2022_CSC(String availability, int enrollment, String coursenum, String coursename, String type,
+            int section,
             String credits, String time, String days, String building, String instructor, String moreinfo,
-            String specialenrollment, String keey, String prereqs, String notes, String description) {
+            String specialenrollment, String prereqs, String notes, String description) {
         super();
         this.availability = availability;
         this.enrollment = enrollment;
@@ -56,7 +55,6 @@ public class Fall_2022_CSC {
         this.instructor = instructor;
         this.moreinfo = moreinfo;
         this.specialenrollment = specialenrollment;
-        this.keey = keey;
         this.prereqs = prereqs;
         this.notes = notes;
         this.description = description;
@@ -78,11 +76,11 @@ public class Fall_2022_CSC {
         this.availability = availability;
     }
 
-    public String getEnrollment() {
+    public int getEnrollment() {
         return enrollment;
     }
 
-    public void setEnrollment(String enrollment) {
+    public void setEnrollment(int enrollment) {
         this.enrollment = enrollment;
     }
 
@@ -110,11 +108,11 @@ public class Fall_2022_CSC {
         this.type = type;
     }
 
-    public String getSection() {
+    public int getSection() {
         return section;
     }
 
-    public void setSection(String section) {
+    public void setSection(int section) {
         this.section = section;
     }
 
@@ -174,15 +172,7 @@ public class Fall_2022_CSC {
         this.specialenrollment = specialenrollment;
     }
 
-    public String getKeey() {
-        return keey;
-    }
-
-    public void setKeey(String keey) {
-        this.keey = keey;
-    }
-
-    public Fall_2022_CSC_Labs isLab() {
+    public Fall_2022_CSC_Labs getLab() {
         return lab;
     }
 

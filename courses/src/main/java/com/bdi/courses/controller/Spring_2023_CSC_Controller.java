@@ -30,7 +30,7 @@ public class Spring_2023_CSC_Controller {
     private Spring_2023_CSC_Repository spring_2023_CSCRepository;
 
     // get all spring_2023_CSCs
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Spring_2023_CSC> getAllSpring_2023_CSCs() {
         return this.spring_2023_CSCRepository.findAll();
     }
@@ -61,7 +61,7 @@ public class Spring_2023_CSC_Controller {
          existingSpring_2023_CSC.setDescription(spring_2023_CSC.getDescription());
          existingSpring_2023_CSC.setEnrollment(spring_2023_CSC.getEnrollment());
          existingSpring_2023_CSC.setInstructor(spring_2023_CSC.getInstructor());
-         existingSpring_2023_CSC.setLab(spring_2023_CSC.isLab());
+         existingSpring_2023_CSC.setLab(spring_2023_CSC.getLab());
          existingSpring_2023_CSC.setMoreinfo(spring_2023_CSC.getMoreinfo());
          existingSpring_2023_CSC.setNotes(spring_2023_CSC.getNotes());
          existingSpring_2023_CSC.setPrereqs(spring_2023_CSC.getPrereqs());

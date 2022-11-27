@@ -30,7 +30,7 @@ public class Spring_2023_Art_History_Controller {
     private Spring_2023_Art_History_Repository spring_2023_Art_HistoryRepository;
 
     // get all spring_2023_Art_Historys
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Spring_2023_Art_History> getAllSpring_2023_Art_Historys() {
         return this.spring_2023_Art_HistoryRepository.findAll();
     }

@@ -27,7 +27,7 @@ public class Fall_2022_Art_History_Controller {
     private Fall_2022_Art_History_Repository fall_2022_Art_HistoryRepository;
 
     // get all fall_2022_Art_Historys
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Fall_2022_Art_History> getAllFall_2022_Art_Historys() {
         return this.fall_2022_Art_HistoryRepository.findAll();
     }
@@ -66,7 +66,7 @@ public class Fall_2022_Art_History_Controller {
         existingFall_2022_Art_History.setMoreinfo(fall_2022_Art_History.getMoreinfo());
         existingFall_2022_Art_History.setNotes(fall_2022_Art_History.getNotes());
         existingFall_2022_Art_History.setPrereqs(fall_2022_Art_History.getPrereqs());
-        existingFall_2022_Art_History.setLab(fall_2022_Art_History.isLab());
+        existingFall_2022_Art_History.setLab(fall_2022_Art_History.getLab());
         existingFall_2022_Art_History.setSection(fall_2022_Art_History.getSection());
         existingFall_2022_Art_History.setSpecialenrollment(fall_2022_Art_History.getSpecialenrollment());
         existingFall_2022_Art_History.setTime(fall_2022_Art_History.getTime());

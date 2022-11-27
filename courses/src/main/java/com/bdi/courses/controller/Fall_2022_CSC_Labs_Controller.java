@@ -25,7 +25,7 @@ public class Fall_2022_CSC_Labs_Controller {
     private Fall_2022_CSC_Labs_Repository fall_2022_CSC_LabsRepository;
 
     // get all fall_2022_CSC_Labss
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Fall_2022_CSC_Labs> getAllFall_2022_CSC_Labss() {
         return this.fall_2022_CSC_LabsRepository.findAll();
     }
