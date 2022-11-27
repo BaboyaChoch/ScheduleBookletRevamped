@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -15,11 +16,11 @@ public class Spring_2023_Art_History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String availability;
-    private String enrollment;
+    private int enrollment;
     private String coursenum;
     private String coursename;
     private String type;
-    private String section;
+    private int section;
     private String credits;
     private String time;
     private String days;
@@ -27,7 +28,8 @@ public class Spring_2023_Art_History {
     private String instructor;
     private String moreinfo;
     private String specialenrollment;
-    private boolean lab;
+    @OneToOne
+    private Lab_Placeholder lab;
     private String prereqs;
     private String notes;
     private String description;
@@ -36,10 +38,10 @@ public class Spring_2023_Art_History {
 
     }
 
-    public Spring_2023_Art_History(String availability, String enrollment, String coursenum, String coursename, String type,
-            String section,
+    public Spring_2023_Art_History(String availability, int enrollment, String coursenum, String coursename, String type,
+            int section,
             String credits, String time, String days, String building, String instructor, String moreinfo,
-            String specialenrollment, boolean lab, String prereqs, String notes,
+            String specialenrollment, Lab_Placeholder lab, String prereqs, String notes,
             String description) {
         super();
         this.availability = availability;
@@ -77,11 +79,11 @@ public class Spring_2023_Art_History {
         this.availability = availability;
     }
 
-    public String getEnrollment() {
+    public int getEnrollment() {
         return enrollment;
     }
 
-    public void setEnrollment(String enrollment) {
+    public void setEnrollment(int enrollment) {
         this.enrollment = enrollment;
     }
 
@@ -109,11 +111,11 @@ public class Spring_2023_Art_History {
         this.type = type;
     }
 
-    public String getSection() {
+    public int getSection() {
         return section;
     }
 
-    public void setSection(String section) {
+    public void setSection(int section) {
         this.section = section;
     }
 
@@ -173,11 +175,11 @@ public class Spring_2023_Art_History {
         this.specialenrollment = specialenrollment;
     }
 
-    public boolean isLab() {
+    public Lab_Placeholder isLab() {
         return lab;
     }
 
-    public void setLab(boolean lab) {
+    public void setLab(Lab_Placeholder lab) {
         this.lab = lab;
     }
 
