@@ -30,8 +30,8 @@ export default function MiniCoursesTable({ sx, rows, isLab = false }) {
   const getHeaders = isLab ? LAB_TABLE_HEADERS : SCHEDULE_TABLE_HEADERS;
 
   return (
-    <Box sx={{ width: "100%", ...sx, border: "1px solid #674EA7" }}>
-      <TableContainer component={Paper}>
+    <Box sx={{ width: "100%", ...sx, border: isLab ? "1px solid #674EA7" : '' }}>
+      <TableContainer component={Paper} sx={{boxShadow:0}}>
         <Table size="small">
           <TableHead>
             <TableRow>

@@ -10,17 +10,17 @@ import Filters from "./components/Filters";
 import CoursesTable from "./components/CoursesTable";
 import NavBar from "./components/NavBar";
 import SearchBar from "./components/SearchBar";
+import ScheduleModel from "./components/ScheduleModel";
 
 const useStyles = makeStyles({
   root: {
   },
   schedule: {
     width: 577,
-    height: 36,
-    backgroundColor: "green",
+    height: 'fit-content',
     position: "fixed",
     bottom: 0,
-    right: 0,
+    right: 10,
   },
 });
 
@@ -121,7 +121,7 @@ export default function App() {
       </Grid>
       <Box>
         <div className={classes.schedule}>
-          <Label>SCHEDULE MODAL</Label>
+          <ScheduleModel />
         </div>
       </Box>
     </div>
