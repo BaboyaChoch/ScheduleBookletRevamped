@@ -14,23 +14,22 @@ public class Fall_2022_CSC {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int availability;
-    private int enrollment;
+    private String availability;
+    private String enrollment;
     private String coursenum;
     private String coursename;
     private String type;
-    private int section;
-    private int credits;
+    private String section;
+    private String credits;
     private String time;
     private String days;
     private String building;
     private String instructor;
     private String moreinfo;
     private String specialenrollment;
-    private int keey;
+    private String keey;
     @OneToOne
     private Fall_2022_CSC_Labs lab;
-    private int labhash;
     private String prereqs;
     private String notes;
     private String description;
@@ -39,10 +38,10 @@ public class Fall_2022_CSC {
 
     }
 
-    public Fall_2022_CSC(int availability, int enrollment, String coursenum, String coursename, String type,
-            int section,
-            int credits, String time, String days, String building, String instructor, String moreinfo,
-            String specialenrollment, int keey, int labhash, String prereqs, String notes, String description) {
+    public Fall_2022_CSC(String availability, String enrollment, String coursenum, String coursename, String type,
+            String section,
+            String credits, String time, String days, String building, String instructor, String moreinfo,
+            String specialenrollment, String keey, String prereqs, String notes, String description) {
         super();
         this.availability = availability;
         this.enrollment = enrollment;
@@ -58,7 +57,6 @@ public class Fall_2022_CSC {
         this.moreinfo = moreinfo;
         this.specialenrollment = specialenrollment;
         this.keey = keey;
-        this.labhash = labhash;
         this.prereqs = prereqs;
         this.notes = notes;
         this.description = description;
@@ -72,19 +70,19 @@ public class Fall_2022_CSC {
         this.id = id;
     }
 
-    public int getAvailability() {
+    public String getAvailability() {
         return availability;
     }
 
-    public void setAvailability(int availability) {
+    public void setAvailability(String availability) {
         this.availability = availability;
     }
 
-    public int getEnrollment() {
+    public String getEnrollment() {
         return enrollment;
     }
 
-    public void setEnrollment(int enrollment) {
+    public void setEnrollment(String enrollment) {
         this.enrollment = enrollment;
     }
 
@@ -112,19 +110,19 @@ public class Fall_2022_CSC {
         this.type = type;
     }
 
-    public int getSection() {
+    public String getSection() {
         return section;
     }
 
-    public void setSection(int section) {
+    public void setSection(String section) {
         this.section = section;
     }
 
-    public int getCredits() {
+    public String getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(String credits) {
         this.credits = credits;
     }
 
@@ -176,11 +174,11 @@ public class Fall_2022_CSC {
         this.specialenrollment = specialenrollment;
     }
 
-    public int getKeey() {
+    public String getKeey() {
         return keey;
     }
 
-    public void setKeey(int keey) {
+    public void setKeey(String keey) {
         this.keey = keey;
     }
 
@@ -190,14 +188,6 @@ public class Fall_2022_CSC {
 
     public void setLab(Fall_2022_CSC_Labs lab) {
         this.lab = lab;
-    }
-
-    public int getLabhash() {
-        return labhash;
-    }
-
-    public void setLabhash(int labhash) {
-        this.labhash = labhash;
     }
 
     public String getPrereqs() {

@@ -51,7 +51,6 @@ public class Fall_2022_CSC_Labs_Controller {
         Fall_2022_CSC_Labs existingFall_2022_CSC_Labs = this.fall_2022_CSC_LabsRepository.findById(fall_2022_CSC_LabsId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Fall_2022_CSC_Labs not found with id :" + fall_2022_CSC_LabsId));
-        existingFall_2022_CSC_Labs.setKeey(fall_2022_CSC_Labs.getKeey());
         existingFall_2022_CSC_Labs.setLabdays(fall_2022_CSC_Labs.getLabdays());
         existingFall_2022_CSC_Labs.setLabinstructor(fall_2022_CSC_Labs.getLabinstructor());
         existingFall_2022_CSC_Labs.setLabtime(fall_2022_CSC_Labs.getLabtime());

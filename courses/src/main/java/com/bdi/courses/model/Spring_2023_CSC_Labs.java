@@ -22,18 +22,15 @@ public class Spring_2023_CSC_Labs {
 
     private String labinstructor;
 
-    private int keey;
-
     public Spring_2023_CSC_Labs() {
     }
 
-    public Spring_2023_CSC_Labs(String type, String labtime, String labdays, String labinstructor, int keey) {
+    public Spring_2023_CSC_Labs(String type, String labtime, String labdays, String labinstructor) {
         super();
         this.type = type;
         this.labtime = labtime;
         this.labdays = labdays;
         this.labinstructor = labinstructor;
-        this.keey = keey;
     }
 
     public Long getId() {
@@ -76,11 +73,4 @@ public class Spring_2023_CSC_Labs {
         this.labinstructor = labinstructor;
     }
 
-    public int getKeey() {
-        return keey;
-    }
-
-    public void setKeey(int keey) {
-        this.keey = keey;
-    }
 }

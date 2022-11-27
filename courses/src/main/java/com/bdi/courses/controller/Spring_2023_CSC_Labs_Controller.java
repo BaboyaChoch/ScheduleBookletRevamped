@@ -52,7 +52,6 @@ public class Spring_2023_CSC_Labs_Controller {
                 .findById(spring_2023_CSC_LabsId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Spring_2023_CSC_Labs not found with id :" + spring_2023_CSC_LabsId));
-        existingSpring_2023_CSC_Labs.setKeey(spring_2023_CSC_Labs.getKeey());
         existingSpring_2023_CSC_Labs.setLabdays(spring_2023_CSC_Labs.getLabdays());
         existingSpring_2023_CSC_Labs.setLabinstructor(spring_2023_CSC_Labs.getLabinstructor());
         existingSpring_2023_CSC_Labs.setLabtime(spring_2023_CSC_Labs.getLabtime());
