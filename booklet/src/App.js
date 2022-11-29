@@ -24,22 +24,6 @@ const useStyles = makeStyles({
   },
 });
 
-const Label = ({ children }) => {
-  return (
-    <Typography
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "white",
-        width: "100%",
-      }}
-    >
-      {children}
-    </Typography>
-  );
-};
-
 export default function App() {
   const classes = useStyles();
   const theme = useTheme();
@@ -50,6 +34,7 @@ export default function App() {
   const [departmentKeyWord, setDepartmentKeyword] = useState(null);
   const [currentTableTotalResults, setCurrentTableTotalResults] = useState(null);
   const [handleClearAllFilters, setHandleClearAllFilters] = useState( () => {})
+  const [scheduledCourses, setScheduledCourses] = useState([])
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");

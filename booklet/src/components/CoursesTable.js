@@ -21,6 +21,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import dayjs from "dayjs";
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import {courses} from "../config/data";
 
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
@@ -59,6 +60,7 @@ export default function CoursesTable({
   const isFilterActive = isSearchFilterActive || isHeaderSortActive || isFilterSidebarActive;
   let TEMP_TABLE_SEARCH_KEYWORD_ACTIVE_FILTER_LABELS_INDEX = null;
 
+  console.log("SAMPLE_COURSES_DATA: ", courses);
   const createData = (
     availability,
     enrollment,
