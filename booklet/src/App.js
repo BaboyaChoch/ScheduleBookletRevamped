@@ -31,12 +31,15 @@ export default function App() {
   const [semesterYearKeyWord, setSemesterYearKeyword] = useState(null);
   const [departmentKeyWord, setDepartmentKeyword] = useState(null);
   const [handleClearAllFilters, setHandleClearAllFilters] = useState(() => {});
-  const [scheduledCourses, setScheduledCourses] = useState([]);
+  const [scheduledCourses, setScheduledCourses] = useState([
+    ["CSC 1350", 3, "1.0", "9:30AM-10:20AM", "M W F"],
+    ["CSC 1253", 1, "3.0", "12:00PM-1:20PM", "T TH"],
+    ["CSC 1240", 1, "3.0", "11:30AM-12:30AM", "M W "],
+  ]);
   const [courses, setCourses] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(true);
-  const filterRef = useRef(null);
-  const tableRef = useRef(null);
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
   useEffect(() => {
     setIsDarkMode(theme.palette.mode == "dark");
@@ -78,7 +81,6 @@ export default function App() {
                 <Grid item xs={2.25} className={classes.filters}>
                   {showResults ? (
                     <Filters
-                      ref={filterRef}
                       filters={filters}
                       setFilters={setFilters}
                       setClearFiltersHandler={setHandleClearAllFilters}
@@ -96,23 +98,17 @@ export default function App() {
                 <Grid item container xs={9.5} className={classes.table}>
                   {showResults ? (
                     <CoursesTable
-                      ref={tableRef}
                       sidebarFilters={filters}
                       setSidebarFilters={setFilters}
                       onClearFilters={handleClearAllFilters}
                       courses={courses}
                       setCourses={setCourses}
                       totalCourses={courses.length}
-                      currentTableSemesterYear={
-                        semesterYearKeyWord
-                          ? semesterYearKeyWord
-                          : "Fall" + " 2022"
-                      }
-                      currentTableDepartment={
-                        departmentKeyWord
-                          ? departmentKeyWord
-                          : "Computer" + " Science"
-                      }
+                      currentTableSemesterYear={semesterYearKeyWord}
+                      currentTableDepartment={departmentKeyWord}
+                      selectedCourses={selectedCourses}
+                      setSelectedCourses={setSelectedCourses}
+                      scheduledCourses={scheduledCourses}
                     />
                   ) : null}
                 </Grid>
@@ -123,7 +119,12 @@ export default function App() {
       </Grid>
       <Box>
         <div className={classes.schedule}>
-          <ScheduleModel />
+          <ScheduleModel
+            scheduledCourses={scheduledCourses}
+            setScheduledCourses={setScheduledCourses}
+            selectedCourses={selectedCourses}
+            setSelectedCourses={setSelectedCourses}
+          />
         </div>
       </Box>
     </div>

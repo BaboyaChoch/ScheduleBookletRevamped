@@ -41,8 +41,12 @@ export default function CoursesTable({
   courses,
   setCourses,
   totalCourses,
+  selectedCourses,
+  setSelectedCourses,
+  scheduledCourses,
 }) {
   const classes = useStyles();
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(undefined);
   const [orderBy, setOrderBy] = useState(undefined);
@@ -56,10 +60,10 @@ export default function CoursesTable({
   const [activeFiltersLabels, setActiveFilterLabels] = useState([]);
   const [tempSearchFilterResults, setTempSearchFilterResults] = useState([]);
   const [tempSidebarFilterResults, setTempSidebarFilterResults] = useState([]);
+
   const isFilterActive =
     isSearchFilterActive || isHeaderSortActive || isFilterSidebarActive;
 
-  console.log("SAMPLE_COURSES_DATA: ", courses);
   const createData = (
     availability,
     enrollment,
@@ -157,12 +161,6 @@ export default function CoursesTable({
   };
 
   const getRowsToFilter = () => {
-    console.log(
-      "getRowsToFilter: ",
-      isFilterActive,
-      filteredRows,
-      filteredRows.length
-    );
     return isFilterActive && filteredRows && filteredRows.length > 0
       ? JSON.parse(JSON.stringify(filteredRows))
       : JSON.parse(JSON.stringify(courses));
@@ -181,7 +179,6 @@ export default function CoursesTable({
         // time will almost always have AM/PM, so any keyword searching for just 'm' is not
         // worth searching
         else if (keyWord != "m") {
-          console.log(keyWord, val);
           if (val.includes(keyWord)) return true;
         }
       }
@@ -267,10 +264,12 @@ export default function CoursesTable({
     }
   };
 
-  const checkIsCourseAdded = (row) => {
-    for (const course of DEFAULT_USER.currentScheduledClasses) {
-      if (row.courseNum == course.courseNum && row.section == course.sectionNum)
+  const checkIsCourseAdded = (num, section) => {
+    const addedCourses = [...scheduledCourses, ...selectedCourses];
+    for (let i = 0; i < addedCourses.length; i++) {
+      if (addedCourses[i][0] == num && addedCourses[i][1] == section) {
         return true;
+      }
     }
     return false;
   };
@@ -520,7 +519,6 @@ export default function CoursesTable({
 
   useEffect(() => {
     if (sidebarFilters) {
-      console.log(sidebarFilters);
       setActiveFilterLabels([]);
       handleSidebarFilters(sidebarFilters);
     }
@@ -656,9 +654,27 @@ export default function CoursesTable({
               <CoursesRow
                 key={`${row.data.courseNum}-${row.data.section}`}
                 row={row.data}
-                isAdded={checkIsCourseAdded(row.data)}
+                isAdded={checkIsCourseAdded(
+                  row.data.courseNum,
+                  row.data.section
+                )}
                 labInfo={row.lab}
                 moreInfo={row.moreInfo}
+                selectedCourses={selectedCourses}
+                scheduledCourses={scheduledCourses}
+                handleAdd={() => {
+                  const index = selectedCourses.length;
+                  setSelectedCourses([
+                    ...selectedCourses,
+                    [
+                      row.data.courseNum,
+                      row.data.section,
+                      row.data.credits,
+                      row.data.time,
+                      row.data.days,
+                    ],
+                  ]);
+                }}
               />
             ))}
             {/*{emptyRows > 0 && (*/}

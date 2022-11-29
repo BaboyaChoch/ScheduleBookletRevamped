@@ -158,7 +158,6 @@ export default function Search({
 
   const handleSearchCourses = () => {
     if (semesterValue && departmentValue) {
-      console.log("CURRENT: ", semesterValue, departmentValue);
       setShowErrorHelperMessage(false);
 
       const semesterDepartment =
