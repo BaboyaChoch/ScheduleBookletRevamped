@@ -55,9 +55,8 @@ export default function Search({
       setLoading(!loading);
       setTimeout(() => {
         setLoading(false);
-      }, 3000);
+      }, 1500);
       setTotalCourses(17);
-      alert("starting search.....");
     } else {
       setShowErrorHelperMessage(true);
     }

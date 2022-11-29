@@ -88,23 +88,48 @@ export default function App() {
                   setLoading={setLoading}
                 />
               </Grid>
-              {loading ? (
-                <Skeleton variant="rectangular">
-                  <Grid container item>
-                    <Grid item xs={2.25} className={classes.filters}>
+
+              <Grid container item>
+                {/* Filters */}
+                <Grid item xs={2.25} className={classes.filters}>
+                  {loading ? (
+                    <Skeleton
+                      animation="wave"
+                      sx={{ bgcolor: "#E0DBED" }}
+                      variant="rounded"
+                    >
                       <Filters
                         filters={filters}
                         setFilters={setFilters}
                         setClearFiltersHandler={setHandleClearAllFilters}
                       />
-                    </Grid>
-                    <Grid item xs={0.25} display="flex" justifyContent="center">
-                      <Divider
-                        orientation="vertical"
-                        sx={{ backgroundColor: "#E0E0E0" }}
-                      />
-                    </Grid>
-                    <Grid item container xs={9.5} className={classes.table}>
+                    </Skeleton>
+                  ) : (
+                    <Filters
+                      filters={filters}
+                      setFilters={setFilters}
+                      setClearFiltersHandler={setHandleClearAllFilters}
+                    />
+                  )}
+                </Grid>
+
+                {/* Divider */}
+                <Grid item xs={0.25} display="flex" justifyContent="center">
+                  <Divider
+                    orientation="vertical"
+                    sx={{ backgroundColor: "#E0E0E0" }}
+                  />
+                </Grid>
+                {/* Table */}
+                <Grid item container xs={9.5} className={classes.table}>
+                  {loading ? (
+                    <Skeleton
+                      animation="wave"
+                      sx={{ bgcolor: "#E0DBED" }}
+                      variant="rounded"
+                      width={"100%"}
+                    >
+                      {" "}
                       <CoursesTable
                         sidebarFilters={filters}
                         setSidebarFilters={setFilters}
@@ -125,25 +150,8 @@ export default function App() {
                             : "Computer" + " Science"
                         }
                       />
-                    </Grid>
-                  </Grid>
-                </Skeleton>
-              ) : (
-                <Grid container item>
-                  <Grid item xs={2.25} className={classes.filters}>
-                    <Filters
-                      filters={filters}
-                      setFilters={setFilters}
-                      setClearFiltersHandler={setHandleClearAllFilters}
-                    />
-                  </Grid>
-                  <Grid item xs={0.25} display="flex" justifyContent="center">
-                    <Divider
-                      orientation="vertical"
-                      sx={{ backgroundColor: "#E0E0E0" }}
-                    />
-                  </Grid>
-                  <Grid item container xs={9.5} className={classes.table}>
+                    </Skeleton>
+                  ) : (
                     <CoursesTable
                       sidebarFilters={filters}
                       setSidebarFilters={setFilters}
@@ -164,9 +172,9 @@ export default function App() {
                           : "Computer" + " Science"
                       }
                     />
-                  </Grid>
+                  )}
                 </Grid>
-              )}
+              </Grid>
             </Grid>
           </Container>
         </Grid>
