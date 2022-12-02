@@ -4,7 +4,6 @@ import TableCell from "@mui/material/TableCell";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 import { Button, Grid, Stack, useMediaQuery } from "@mui/material";
 import { makeStyles, useTheme } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
@@ -12,7 +11,7 @@ import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
 import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Tooltip from "@mui/material/Tooltip";
-import { DEFAULT_USER } from "../config/user";
+import DEFAULT_USER from "../config/user";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -40,7 +39,16 @@ const useStyles = makeStyles({
   center: {},
 });
 
-export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
+export default function CoursesRow({
+  row,
+  isAdded,
+  labInfo,
+  moreInfo,
+  handleAdd,
+  selectedCourses,
+  scheduledCourses,
+  semester,
+}) {
   const [openMoreInfo, setOpenMoreInfo] = useState(false);
   const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
   const [courseNotAddableReason, setCourseNotAddableReason] =
@@ -54,7 +62,32 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
     moreInfo.isMajorsOnly === true ||
     row.courseName.toUpperCase().includes("MJRS");
 
-  const LabeledText = ({label, info}) => {
+  const getAvailabilityText = (avl) => {
+    if (avl >= 1)
+      return (
+        <Typography fontSize={11} fontWeight={500}>
+          {avl}
+        </Typography>
+      );
+
+    if (avl === 0) {
+      return (
+        <Typography fontSize={11} fontWeight={500} color="error">
+          Full
+        </Typography>
+      );
+    }
+
+    if (avl <= -1) {
+      return (
+        <Typography fontSize={11} fontWeight={500} color={"#FFB142"}>
+          {`${avl * -1} Wait-listed`}
+        </Typography>
+      );
+    }
+  };
+
+  const LabeledText = ({ label, info }) => {
     label = MORE_INFO_LABEL_MAP[label];
     return (
       <Box
@@ -69,26 +102,26 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
             <Typography
               gutterBottom
               component="div"
-              sx={{fontSize: 12, fontWeight: 700}}
+              sx={{ fontSize: 12, fontWeight: 700 }}
             >
               {`${label}`}&nbsp;
             </Typography>
           </Grid>
-          <Grid item xs={labInfo ? 0.25 : 0}/>
+          <Grid item xs={labInfo ? 0.25 : 0} />
           <Grid
             item
             xs={labInfo ? 10.7 : 10.95}
-            sx={{display: "flex", alignItems: "center"}}
+            sx={{ display: "flex", alignItems: "center" }}
           >
             <Typography
               gutterBottom
               component="div"
-              sx={{fontSize: 10, fontWeight: 500}}
+              sx={{ fontSize: 10, fontWeight: 500 }}
             >
               {info ? info : `No ${label} Available`}
             </Typography>
           </Grid>
-          <Grid item xs={0.05}/>
+          <Grid item xs={0.05} />
         </Grid>
       </Box>
     );
@@ -101,7 +134,15 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
   // Todo: In the else statement, call function to add course to schedule modal
   const handleOnAddClass = (isClickedFromModalOrMoreInfo = false) => {
     if (!isClickedFromModalOrMoreInfo && labInfo) handleAddLabNoticeModalOpen();
-    else console.log("ADD CLASS WAS CLICKED", isClickedFromModalOrMoreInfo);
+    else {
+      if (checkIsCourseAdded(row.courseNum, row.section)) {
+        alert("Course Currently Already Part of Schedule");
+      } else {
+        handleAdd();
+        setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
+        setIsNotAddable(true);
+      }
+    }
   };
 
   const MORE_INFO_LABEL_MAP = {
@@ -116,12 +157,15 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
       "Major does not match. You must be a major to take add this course",
     NOT_PART_OF_RES_HALL:
       "Residental hall does not match. You must reside in the listed residental hall to add this course",
+    SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE:
+      "The semester you are trying to schedule for is not available" +
+      " or already passed",
   };
 
   const getNotAddableToolTipIcon = () => {
     if (courseNotAddableReason === CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED)
-      return <CheckCircleIcon sx={{fontSize: 15, color: "#66BB6A"}}/>;
-    else return <InfoIcon sx={{fontSize: 15, color: "red"}}/>;
+      return <CheckCircleIcon sx={{ fontSize: 15, color: "#66BB6A" }} />;
+    else return <InfoIcon sx={{ fontSize: 15, color: "red" }} />;
   };
 
   useEffect(() => {
@@ -138,6 +182,11 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
         CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_MAJOR
       );
       setIsNotAddable(true);
+    } else if (DEFAULT_USER.currentSemester !== semester) {
+      setCourseNotAddableReason(
+        CLASS_NOT_ADDABLE_REASONS_MAP.SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE
+      );
+      setIsNotAddable(true);
     } else if (false) {
       // Todo: check if course is restricted by a res hall and check if the stundet's res hall is part of the list if it is
       setCourseNotAddableReason(
@@ -149,33 +198,68 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
     }
   }, []);
 
+  const checkIsCourseAdded = (num, section) => {
+    const addedCourses = [...scheduledCourses, ...selectedCourses];
+    for (let i = 0; i < addedCourses.length; i++) {
+      if (addedCourses[i][0] == num && addedCourses[i][1] == section) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    window.addEventListener("onClassRemoved", () => {
+      if (checkIsCourseAdded(row.courseNum, row.section)) {
+        setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
+        setIsNotAddable(true);
+      } else {
+        setIsNotAddable(false);
+        setCourseNotAddableReason(undefined);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener("onClassRemoved", () => {});
+    };
+  }, []);
+
   return (
     <>
       <TableRow
         sx={{
-          "& > *": {border: ".5px solid lightgrey", width: "fit-content"},
+          "& > *": { border: ".5px solid lightgrey", width: "fit-content" },
         }}
       >
         {Object.entries(row).map((data, index) => {
           const rowContent = data[1];
           if (index + 1 < Object.entries(row).length) {
             return (
-              <TableCell sx={{p: 0}} align="center" key={index}>
-                <Typography fontSize={11} fontWeight={500}>
-                  {rowContent}
-                </Typography>
+              <TableCell sx={{ p: 0 }} align="center" key={index}>
+                {index === 0 ? (
+                  getAvailabilityText(rowContent)
+                ) : (
+                  <Typography fontSize={11} fontWeight={500}>
+                    {rowContent}
+                  </Typography>
+                )}
               </TableCell>
             );
           }
         })}
         <TableCell className={classes.rowCell} align="center">
           <Grid container direction={isSmallScreen ? "column" : "row"}>
-            <Grid
-              item
-              xs={5.5}
-              className={isSmallScreen ? classes.center : ""}
-            >
-              <Box boxShadow={1} sx={{borderRadius: 15, height: 'fit-content', width: 'fit-content'}}>
+            <Grid item xs={5.5} className={isSmallScreen ? classes.center : ""}>
+              <Box
+                boxShadow={1}
+                sx={{
+                  borderRadius: 15,
+                  height: "fit-content",
+                  width: "fit-content",
+                }}
+              >
                 <Button
                   className={classes.actionButtons}
                   variant="contained"
@@ -188,7 +272,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                 </Button>
               </Box>
             </Grid>
-            <Grid item xs={.2}/>
+            <Grid item xs={0.2} />
             <Grid
               className={isSmallScreen ? classes.center : ""}
               item
@@ -201,7 +285,10 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                 {isSmallScreen && isNotAddable ? (
                   ""
                 ) : (
-                  <Box boxShadow={1} sx={{borderRadius: 15, height: 'fit-content'}}>
+                  <Box
+                    boxShadow={1}
+                    sx={{ borderRadius: 15, height: "fit-content" }}
+                  >
                     <Button
                       className={classes.actionButtons}
                       variant="contained"
@@ -210,7 +297,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                       onClick={() => handleOnAddClass()}
                       color="success"
                       disabled={isNotAddable || (openMoreInfo && labInfo)}
-                      sx={{color: "white"}}
+                      sx={{ color: "white" }}
                     >
                       Add Class
                     </Button>
@@ -223,9 +310,9 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                   display: "flex",
                   alignItems: "center",
                   marginLeft: isSmallScreen ? 0 : 1,
-                  marginTop:  isSmallScreen ? .2 : 0,
-                  justifyContent: 'center',
-                  width: '100%'
+                  marginTop: isSmallScreen ? 0.2 : 0,
+                  justifyContent: "center",
+                  width: "100%",
                 }}
               >
                 {isNotAddable ? (
@@ -241,7 +328,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell sx={{paddingBottom: 0, paddingTop: 0}} colSpan={12}>
+        <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={openMoreInfo} timeout="auto" unmountOnExit>
             <Box className={classes.moreInfoCont}>
               <Grid container direction="column">
@@ -259,7 +346,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                       <Typography
                         gutterBottom
                         component="div"
-                        sx={{fontSize: 14, fontWeight: 700}}
+                        sx={{ fontSize: 14, fontWeight: 700 }}
                       >
                         More Info&nbsp;
                       </Typography>
@@ -320,7 +407,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                   {labInfo ? (
                     <>
                       {" "}
-                      <Grid item xs={0.1}/>
+                      <Grid item xs={0.1} />
                       <Grid item xs={3.4}>
                         <MiniCoursesTable
                           isLab
@@ -338,7 +425,7 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                   ) : (
                     ""
                   )}
-                  <Grid item xs={0.1}/>
+                  <Grid item xs={0.1} />
                   <Grid
                     item
                     container
@@ -349,23 +436,26 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
                       if (label != "specialEnrollment") {
                         return (
                           <Grid key={index} item>
-                            <LabeledText label={label} info={info}/>
+                            <LabeledText label={label} info={info} />
                           </Grid>
                         );
                       }
                     })}
                   </Grid>
                 </Grid>
-                <Grid item sx={{display: "flex", justifyContent: "flex-end"}}>
+                <Grid item sx={{ display: "flex", justifyContent: "flex-end" }}>
                   {labInfo ? (
-                    <Box boxShadow={1} sx={{borderRadius: 15, m: 1, height: 'fit-content'}}>
+                    <Box
+                      boxShadow={1}
+                      sx={{ borderRadius: 15, m: 1, height: "fit-content" }}
+                    >
                       <Button
                         variant="contained"
                         aria-label="expand row"
                         size="small"
                         onClick={() => handleOnAddClass(true)}
                         color="success"
-                        disabled={isAdded}
+                        disabled={isAdded || isNotAddable}
                         sx={{
                           borderRadius: "15px !important",
                           width: "fit-content",
@@ -406,20 +496,3 @@ export default function CoursesRow({row, isAdded, labInfo, moreInfo}) {
     </>
   );
 }
-
-CoursesRow.propTypes = {
-  row: PropTypes.shape({
-    availability: PropTypes.number.isRequired,
-    enrollment: PropTypes.number.isRequired,
-    courseNum: PropTypes.string.isRequired,
-    courseName: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    section: PropTypes.number.isRequired,
-    credits: PropTypes.number.isRequired,
-    time: PropTypes.string.isRequired,
-    days: PropTypes.string.isRequired,
-    building: PropTypes.string.isRequired,
-    instructor: PropTypes.string.isRequired,
-    isAdded: PropTypes.bool,
-  }).isRequired,
-};

@@ -64,6 +64,7 @@ public class Spring_2023_Art_History_Controller {
          existingSpring_2023_Art_History.setMoreinfo(spring_2023_Art_History.getMoreinfo());
          existingSpring_2023_Art_History.setNotes(spring_2023_Art_History.getNotes());
          existingSpring_2023_Art_History.setPrereqs(spring_2023_Art_History.getPrereqs());
+         existingSpring_2023_Art_History.setLab(spring_2023_Art_History.getLab());
          existingSpring_2023_Art_History.setSection(spring_2023_Art_History.getSection());
          existingSpring_2023_Art_History.setSpecialenrollment(spring_2023_Art_History.getSpecialenrollment());
          existingSpring_2023_Art_History.setTime(spring_2023_Art_History.getTime());

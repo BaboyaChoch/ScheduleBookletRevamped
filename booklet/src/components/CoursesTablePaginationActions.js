@@ -12,7 +12,6 @@ export function CoursesTablePaginationActions({
   onPageChange,
 }) {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -31,7 +30,7 @@ export function CoursesTablePaginationActions({
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: isSmallScreen ? 0 : 7 }}>
+    <Box sx={{ flexShrink: 0, ml: 4 }}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}

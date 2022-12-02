@@ -1,16 +1,5 @@
-import * as React from "react";
-import { useState } from "react";
-import {
-  Typography,
-  Checkbox,
-  FormControlLabel,
-  Container,
-  Grid,
-  Box,
-  FormGroup,
-} from "@mui/material";
+import { Checkbox, FormControlLabel, Box, FormGroup } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Stack } from "@mui/system";
 
 const useStyles = makeStyles({
   headerText: {
@@ -42,14 +31,18 @@ export default function CheckmarkDisplayer({
   return (
     <Box>
       {/* Body - checklist */}
-      <Box sx={{paddingLeft: 1}}>
+      <Box sx={{ paddingLeft: 1 }}>
         <FormGroup>
           {itemList.map((element, index) => {
             return (
               <FormControlLabel
                 key={element.id}
-                onChange={(event) => handleChange(event, index)}
-                control={<Checkbox />}
+                control={
+                  <Checkbox
+                    value={value[index].checked}
+                    onChange={(event) => handleChange(event, index)}
+                  />
+                }
                 label={element.label}
               />
             );

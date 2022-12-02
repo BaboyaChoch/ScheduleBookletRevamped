@@ -179,6 +179,10 @@ public class Spring_2023_Art_History {
         return lab;
     }
 
+    public Lab_Placeholder getLab() {
+        return lab;
+    }
+
     public void setLab(Lab_Placeholder lab) {
         this.lab = lab;
     }

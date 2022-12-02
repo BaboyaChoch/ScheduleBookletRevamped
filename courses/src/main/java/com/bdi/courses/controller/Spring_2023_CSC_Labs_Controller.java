@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.bdi.courses.exception.ResourceNotFoundException;
 import com.bdi.courses.model.Spring_2023_CSC_Labs;
@@ -19,6 +20,7 @@ import com.bdi.courses.repository.Spring_2023_CSC_Labs_Repository;
 
 @RestController
 @RequestMapping("/Spring_2023_CSC_Labs")
+@CrossOrigin
 public class Spring_2023_CSC_Labs_Controller {
 
     @Autowired
