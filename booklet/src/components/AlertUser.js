@@ -57,133 +57,131 @@ export default function AlertUser({
   };
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={onClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Box className={classes.root}>
-            <Grid container direction="column" spacing={1}>
-              <Grid
-                className={classes.modalItem}
-                item
-                container
-                direction="column"
-                // sx={{ paddingTop: 10 }}
-              >
-                {/*<Grid item>*/}
-                {/*  <Box className={classes.warnIcon}>*/}
-                {/*    <WarningAmberIcon sx={{ fontSize: 120, color: "white" }} />*/}
-                {/*  </Box>*/}
-                {/*</Grid>*/}
-                <Grid>
-                  <Typography variant="h5" sx={{ fontWeight: 700, p: 1 }}>
-                    {titleLabel}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Divider
-                    orientation="horizontal"
-                    sx={{ backgroundColor: "#E0E0E0", width: "100%" }}
-                  />
-                </Grid>
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={open}
+      onClose={onClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={open}>
+        <Box className={classes.root}>
+          <Grid container direction="column" spacing={1}>
+            <Grid
+              className={classes.modalItem}
+              item
+              container
+              direction="column"
+              // sx={{ paddingTop: 10 }}
+            >
+              {/*<Grid item>*/}
+              {/*  <Box className={classes.warnIcon}>*/}
+              {/*    <WarningAmberIcon sx={{ fontSize: 120, color: "white" }} />*/}
+              {/*  </Box>*/}
+              {/*</Grid>*/}
+              <Grid>
+                <Typography variant="h5" sx={{ fontWeight: 700, p: 1 }}>
+                  {titleLabel}
+                </Typography>
               </Grid>
               <Grid
-                className={classes.modalItem}
                 item
-                container
-                direction={"column"}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                }}
               >
-                <Grid item>
-                  <Typography
-                    variant="subtitle2"
-                    textAlign={"center"}
-                    sx={{ m: 1 }}
-                  >
-                    {message}
-                  </Typography>
-                </Grid>
-                {isScheduleAlert ? (
-                  <Grid item>
-                    <Stack divider={<Divider />} spacing={1}>
-                      {scheduleConflicts.map((conflict, index) => {
-                        console.log(conflict);
-                        return (
-                          <Typography
-                            key={index}
-                            color={"error"}
-                            sx={{ fontWeight: 600 }}
-                          >
-                            {`${conflict.day} - ${conflict.classA} - ${conflict.classB}`}
-                          </Typography>
-                        );
-                      })}
-                    </Stack>
-                  </Grid>
-                ) : null}
-              </Grid>
-              <Grid
-                className={classes.modalItem}
-                item
-                container
-                sx={{ paddingBottom: 1 }}
-              >
-                <Grid item>
-                  <Box
-                    boxShadow={1}
-                    sx={{ borderRadius: 15, height: "fit-content" }}
-                  >
-                    <Button
-                      className={classes.modalActionsButtons}
-                      variant="contained"
-                      aria-label="expand row"
-                      size="small"
-                      onClick={() => handleOnAccept()}
-                      color="success"
-                      sx={{ color: "white" }}
-                    >
-                      {acceptLabel}
-                    </Button>
-                  </Box>
-                </Grid>
-                <Grid item xs={0.2} />
-                <Grid item>
-                  <Box
-                    boxShadow={1}
-                    sx={{ borderRadius: 15, height: "fit-content" }}
-                  >
-                    <Button
-                      className={classes.modalActionsButtons}
-                      variant="contained"
-                      aria-label="expand row"
-                      size="small"
-                      onClick={onClose}
-                      color="error"
-                    >
-                      Cancel
-                    </Button>
-                  </Box>
-                </Grid>
+                <Divider
+                  orientation="horizontal"
+                  sx={{ backgroundColor: "#E0E0E0", width: "100%" }}
+                />
               </Grid>
             </Grid>
-          </Box>
-        </Fade>
-      </Modal>
-    </div>
+            <Grid
+              className={classes.modalItem}
+              item
+              container
+              direction={"column"}
+            >
+              <Grid item>
+                <Typography
+                  variant="subtitle2"
+                  textAlign={"center"}
+                  sx={{ m: 1 }}
+                >
+                  {message}
+                </Typography>
+              </Grid>
+              {isScheduleAlert ? (
+                <Grid item>
+                  <Stack divider={<Divider />} spacing={1}>
+                    {scheduleConflicts.map((conflict, index) => {
+                      console.log(conflict);
+                      return (
+                        <Typography
+                          key={index}
+                          color={"error"}
+                          sx={{ fontWeight: 600 }}
+                        >
+                          {`${conflict.day} - ${conflict.classA} - ${conflict.classB}`}
+                        </Typography>
+                      );
+                    })}
+                  </Stack>
+                </Grid>
+              ) : null}
+            </Grid>
+            <Grid
+              className={classes.modalItem}
+              item
+              container
+              sx={{ paddingBottom: 1 }}
+            >
+              <Grid item>
+                <Box
+                  boxShadow={1}
+                  sx={{ borderRadius: 15, height: "fit-content" }}
+                >
+                  <Button
+                    className={classes.modalActionsButtons}
+                    variant="contained"
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => handleOnAccept()}
+                    color="success"
+                    sx={{ color: "white" }}
+                  >
+                    {acceptLabel}
+                  </Button>
+                </Box>
+              </Grid>
+              <Grid item xs={0.2} />
+              <Grid item>
+                <Box
+                  boxShadow={1}
+                  sx={{ borderRadius: 15, height: "fit-content" }}
+                >
+                  <Button
+                    className={classes.modalActionsButtons}
+                    variant="contained"
+                    aria-label="expand row"
+                    size="small"
+                    onClick={onClose}
+                    color="error"
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </Fade>
+    </Modal>
   );
 }
