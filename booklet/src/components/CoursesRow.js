@@ -4,7 +4,6 @@ import TableCell from "@mui/material/TableCell";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 import { Button, Grid, Stack, useMediaQuery } from "@mui/material";
 import { makeStyles, useTheme } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
@@ -12,7 +11,7 @@ import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
 import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Tooltip from "@mui/material/Tooltip";
-import { DEFAULT_USER } from "../config/user";
+import DEFAULT_USER from "../config/user";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -48,6 +47,7 @@ export default function CoursesRow({
   handleAdd,
   selectedCourses,
   scheduledCourses,
+  semester,
 }) {
   const [openMoreInfo, setOpenMoreInfo] = useState(false);
   const [openAddLabNoticeModal, setOpenAddLabNoticeModal] = useState(false);
@@ -61,6 +61,31 @@ export default function CoursesRow({
   const isMajorsOnly =
     moreInfo.isMajorsOnly === true ||
     row.courseName.toUpperCase().includes("MJRS");
+
+  const getAvailabilityText = (avl) => {
+    if (avl >= 1)
+      return (
+        <Typography fontSize={11} fontWeight={500}>
+          {avl}
+        </Typography>
+      );
+
+    if (avl === 0) {
+      return (
+        <Typography fontSize={11} fontWeight={500} color="error">
+          Full
+        </Typography>
+      );
+    }
+
+    if (avl <= -1) {
+      return (
+        <Typography fontSize={11} fontWeight={500} color={"#FFB142"}>
+          {`${avl * -1} Wait-listed`}
+        </Typography>
+      );
+    }
+  };
 
   const LabeledText = ({ label, info }) => {
     label = MORE_INFO_LABEL_MAP[label];
@@ -132,6 +157,9 @@ export default function CoursesRow({
       "Major does not match. You must be a major to take add this course",
     NOT_PART_OF_RES_HALL:
       "Residental hall does not match. You must reside in the listed residental hall to add this course",
+    SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE:
+      "The semester you are trying to schedule for is not available" +
+      " or already passed",
   };
 
   const getNotAddableToolTipIcon = () => {
@@ -152,6 +180,11 @@ export default function CoursesRow({
     ) {
       setCourseNotAddableReason(
         CLASS_NOT_ADDABLE_REASONS_MAP.NOT_PART_OF_MAJOR
+      );
+      setIsNotAddable(true);
+    } else if (DEFAULT_USER.currentSemester !== semester) {
+      setCourseNotAddableReason(
+        CLASS_NOT_ADDABLE_REASONS_MAP.SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE
       );
       setIsNotAddable(true);
     } else if (false) {
@@ -205,9 +238,13 @@ export default function CoursesRow({
           if (index + 1 < Object.entries(row).length) {
             return (
               <TableCell sx={{ p: 0 }} align="center" key={index}>
-                <Typography fontSize={11} fontWeight={500}>
-                  {rowContent}
-                </Typography>
+                {index === 0 ? (
+                  getAvailabilityText(rowContent)
+                ) : (
+                  <Typography fontSize={11} fontWeight={500}>
+                    {rowContent}
+                  </Typography>
+                )}
               </TableCell>
             );
           }
@@ -459,20 +496,3 @@ export default function CoursesRow({
     </>
   );
 }
-
-CoursesRow.propTypes = {
-  row: PropTypes.shape({
-    availability: PropTypes.number.isRequired,
-    enrollment: PropTypes.number.isRequired,
-    courseNum: PropTypes.string.isRequired,
-    courseName: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    section: PropTypes.number.isRequired,
-    credits: PropTypes.number.isRequired,
-    time: PropTypes.string.isRequired,
-    days: PropTypes.string.isRequired,
-    building: PropTypes.string.isRequired,
-    instructor: PropTypes.string.isRequired,
-    isAdded: PropTypes.bool,
-  }).isRequired,
-};

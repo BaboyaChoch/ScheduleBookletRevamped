@@ -54,8 +54,10 @@ export default function Filters({
   setFilters,
   setClearFiltersHandler,
   ref,
+  sx,
 }) {
   const classes = useStyles();
+  const [randKey, setRandKey] = useState(0);
   const [courseTimes, setCourseTimes] = useState(null);
 
   // False -> full class, True -> classes available, Undefined -> all classes
@@ -111,12 +113,22 @@ export default function Filters({
   };
 
   const resetAllFilterSidebarOptions = () => {
+    // reset sidebar to default values, uncheck everything and all courses selected
     setCourseTimes(null);
     setAvailability(null);
     setCourseLevels(JSON.parse(JSON.stringify(courseLevelList)));
     setCourseDays(JSON.parse(JSON.stringify(courseDayList)));
     setCreditHours(JSON.parse(JSON.stringify(creditHourList)));
-    handleApplyFilters();
+
+    setFilters({
+      course_times: null,
+      course_levels: null,
+      availability: null,
+      course_days: null,
+      credit_hours: null,
+    });
+
+    setRandKey(Math.random());
   };
 
   useEffect(() => {
@@ -124,7 +136,7 @@ export default function Filters({
   }, []);
 
   return (
-    <Box ref={ref} sx={{ width: "100%" }}>
+    <Box ref={ref} sx={{ width: "100%", ...sx }} key={randKey}>
       <Stack divider={<Divider />} spacing={1}>
         <div className={classes.filterStack}>
           <Typography sx={{ color: "#674EA7", fontWeight: 700 }}>

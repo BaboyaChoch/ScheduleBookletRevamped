@@ -5,10 +5,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import MiniCoursesTable from "./MiniCoursesTable";
 import { Divider, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { Stack } from "@mui/system";
 
 const useStyles = makeStyles({
   root: {
@@ -46,7 +45,9 @@ export default function AlertUser({
   onAccept,
   titleLabel,
   acceptLabel,
-  message,
+  message = null,
+  isScheduleAlert = false,
+  scheduleConflicts = [],
 }) {
   const classes = useStyles();
 
@@ -102,8 +103,39 @@ export default function AlertUser({
                   />
                 </Grid>
               </Grid>
-              <Grid className={classes.modalItem} item sx={{ m: 2 }}>
-                <Typography variant="subtitle2">{message}</Typography>
+              <Grid
+                className={classes.modalItem}
+                item
+                container
+                direction={"column"}
+              >
+                <Grid item>
+                  <Typography
+                    variant="subtitle2"
+                    textAlign={"center"}
+                    sx={{ m: 1 }}
+                  >
+                    {message}
+                  </Typography>
+                </Grid>
+                {isScheduleAlert ? (
+                  <Grid item>
+                    <Stack divider={<Divider />} spacing={1}>
+                      {scheduleConflicts.map((conflict, index) => {
+                        console.log(conflict);
+                        return (
+                          <Typography
+                            key={index}
+                            color={"error"}
+                            sx={{ fontWeight: 600 }}
+                          >
+                            {`${conflict.day} - ${conflict.classA} - ${conflict.classB}`}
+                          </Typography>
+                        );
+                      })}
+                    </Stack>
+                  </Grid>
+                ) : null}
               </Grid>
               <Grid
                 className={classes.modalItem}

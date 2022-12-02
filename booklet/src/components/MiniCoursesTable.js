@@ -143,7 +143,7 @@ export default function MiniCoursesTable({
                           aria-label="expand row"
                           size="small"
                           onClick={() => handleRemove(row[0], row[1])}
-                          color="error"
+                          color="warning"
                         >
                           REMOVE
                         </Button>
@@ -159,8 +159,10 @@ export default function MiniCoursesTable({
         open={openDropCourseAlert}
         onClose={() => setOpenDropCourseAlert(false)}
         message={`Are you sure you want to drop ${
-          selectedCourse ? selectedCourse[0] : "this class"
-        }?`}
+          selectedCourse
+            ? `this already scheduled course ? ${selectedCourse[0]}`
+            : "this class?"
+        }`}
         titleLabel="Drop Course?"
         acceptLabel="Drop Course"
         onAccept={() =>

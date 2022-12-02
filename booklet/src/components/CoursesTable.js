@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,12 +9,11 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import CoursesRow from "./CoursesRow";
-import { Chip, Grid, TextField } from "@mui/material";
+import { Chip, Grid, TextField, useMediaQuery } from "@mui/material";
 import TablePagination from "@mui/material/TablePagination";
 import { CoursesTablePaginationActions } from "./CoursesTablePaginationActions";
-import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { DEFAULT_USER } from "../config/user";
+import DEFAULT_USER from "../config/user";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
@@ -44,9 +44,14 @@ export default function CoursesTable({
   selectedCourses,
   setSelectedCourses,
   scheduledCourses,
+  sx,
+  showResults,
 }) {
   const classes = useStyles();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
 
+  const [semester, setSemester] = useState("");
+  const [department, setDepartment] = useState("");
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(undefined);
   const [orderBy, setOrderBy] = useState(undefined);
@@ -55,54 +60,18 @@ export default function CoursesTable({
   const [filteredRows, setFilteredRows] = useState([]);
   const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
   const [isHeaderSortActive, setIsHeaderSortActive] = useState(false);
-  const [isFilterSidebarActive, setIsFitlerSidebarActive] = useState(false);
+  const [isFilterSidebarActive, setIsFilterSidebarActive] = useState(false);
   const [selectedHeader, setSelectedHeader] = useState("availability");
   const [activeFiltersLabels, setActiveFilterLabels] = useState([]);
   const [tempSearchFilterResults, setTempSearchFilterResults] = useState([]);
   const [tempSidebarFilterResults, setTempSidebarFilterResults] = useState([]);
+  const [totalFilterResultCount, setTotalFilterResultCount] = useState(0);
+
+  // use to set key of root component, on change will reload component
+  const [randIndex, setRandIndex] = useState(0);
 
   const isFilterActive =
     isSearchFilterActive || isHeaderSortActive || isFilterSidebarActive;
-
-  const createData = (
-    availability,
-    enrollment,
-    courseNum,
-    courseName,
-    type,
-    section,
-    credits,
-    time,
-    days,
-    building,
-    instructor
-  ) => {
-    return {
-      availability,
-      enrollment,
-      courseNum,
-      courseName,
-      type,
-      section,
-      credits,
-      time,
-      days,
-      building,
-      instructor,
-      moreInfo: [
-        {
-          date: "2020-01-05",
-          customerId: "11091700",
-          amount: 3,
-        },
-        {
-          date: "2020-01-02",
-          customerId: "Anonymous",
-          amount: 1,
-        },
-      ],
-    };
-  };
 
   const TABLE_HEADERS = [
     "Availability",
@@ -172,37 +141,42 @@ export default function CoursesTable({
 
     const newRows = getRowsToFilter().filter((row, index) => {
       for (const [key, value] of Object.entries(row.data)) {
-        const val = value.toString().toLowerCase();
-        if (key != "time") {
-          if (val.includes(keyWord)) return true;
-        }
-        // time will almost always have AM/PM, so any keyword searching for just 'm' is not
-        // worth searching
-        else if (keyWord != "m") {
-          if (val.includes(keyWord)) return true;
+        if (key !== "actions") {
+          const val = value.toString().toLowerCase();
+          if (key != "time") {
+            if (val.includes(keyWord)) return true;
+          }
+          // time will almost always have AM/PM, so any keyword searching for just 'm' is not
+          // worth searching
+          else if (keyWord != "m") {
+            if (val.includes(keyWord)) return true;
+          }
         }
       }
       return false;
     });
 
     setFilteredRows(newRows);
+    setTotalFilterResultCount(newRows.length);
     setTempSearchFilterResults(newRows);
     setIsSearchFilterActive(true);
   };
 
   const handleOnSearchEnter = (event) => {
     if (event.key === "Enter") {
+      if (isSearchFilterActive) {
+        activeFiltersLabels.splice(0, 1);
+        setActiveFilterLabels(activeFiltersLabels);
+      }
+
       if (searchKeyword === "" && searchKeyword.length < 1) {
-        if (isSearchFilterActive) {
-          activeFiltersLabels.splice(0, 1);
-          setActiveFilterLabels(activeFiltersLabels);
-        }
         setIsSearchFilterActive(false);
         setTempSearchFilterResults([]);
         if (!isFilterActive) {
           setFilteredRows([]);
         } else if (isFilterSidebarActive) {
           setFilteredRows(tempSidebarFilterResults);
+          setTotalFilterResultCount(tempSidebarFilterResults.length);
         }
       } else {
         lazyFilterRowsByKeyWord(searchKeyword);
@@ -264,7 +238,8 @@ export default function CoursesTable({
     }
   };
 
-  const checkIsCourseAdded = (num, section) => {
+  const checkIsCourseAdded = (num, section, semester) => {
+    if (semester !== DEFAULT_USER.currentSemester) return false;
     const addedCourses = [...scheduledCourses, ...selectedCourses];
     for (let i = 0; i < addedCourses.length; i++) {
       if (addedCourses[i][0] == num && addedCourses[i][1] == section) {
@@ -442,6 +417,9 @@ export default function CoursesTable({
        */
       newRows = newRows.filter((row, index) => {
         const prop = SIDEBAR_FILTERS_NAME_TO_ROW_PROP_MAP.course_times;
+
+        if (row.data[prop] === "TBA") return false;
+
         let [currentCourseStartTime, currentCourseEndTime] =
           row.data[prop].split("-");
 
@@ -511,9 +489,10 @@ export default function CoursesTable({
     }
 
     setFilteredRows(newRows);
+    setTotalFilterResultCount(newRows.length);
     setTempSidebarFilterResults(newRows);
     setPage(0);
-    setIsFitlerSidebarActive(true);
+    setIsFilterSidebarActive(true);
     setActiveFilterLabels([...appliedFilters]);
   };
 
@@ -521,11 +500,18 @@ export default function CoursesTable({
     if (sidebarFilters) {
       setActiveFilterLabels([]);
       handleSidebarFilters(sidebarFilters);
+      console.log(sidebarFilters);
     }
   }, [sidebarFilters]);
 
+  useEffect(() => {
+    if (currentTableSemesterYear) setSemester(currentTableSemesterYear);
+
+    if (currentTableDepartment) setDepartment(currentTableDepartment);
+  }, [showResults]);
+
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", ...sx }} key={randIndex}>
       <Box sx={{ marginBottom: 2 }}>
         <Grid container>
           <Grid
@@ -539,9 +525,13 @@ export default function CoursesTable({
             }}
           >
             <Grid item xs={12}>
-              <Typography fontWeight={500} color="primary">
-                {`Results for "${currentTableSemesterYear} ${currentTableDepartment}" (${totalCourses} Courses)`}
-              </Typography>
+              {showResults ? (
+                <Typography fontWeight={700} color="primary">
+                  {`${semester} ${department} | ${
+                    !isFilterActive ? totalCourses : totalFilterResultCount
+                  } Course(s)`}
+                </Typography>
+              ) : null}
             </Grid>
             <Grid item>
               {isFilterActive && activeFiltersLabels.length
@@ -555,24 +545,25 @@ export default function CoursesTable({
                     />
                   ))
                 : ""}
-              {/* Todo: Refactor how values are set for sidebar, to allow resetting values to make clear all possible*/}
-              {/*{*/}
-              {/*  (isFilterActive && activeFiltersLabels.length) ? (*/}
-              {/*    <Chip*/}
-              {/*      label="Clear All Filters"*/}
-              {/*      color='primary'*/}
-              {/*      variant='filled'*/}
-              {/*      sx={{fontSize: 15, m: .5, height: 20, fontWeight: 600}}*/}
-              {/*      onClick={() => {*/}
-              {/*        setActiveFilterLabels([])*/}
-              {/*        onClearFilters()*/}
-              {/*        setIsHeaderSortActive(false);*/}
-              {/*        setIsSearchFilterActive(false);*/}
-              {/*        setSearchKeyword("")*/}
-              {/*        handleOnSearchEnter({key: "Enter"})*/}
-              {/*      }}*/}
-              {/*    />) : ''*/}
-              {/*}*/}
+              {isFilterActive && activeFiltersLabels.length ? (
+                <Chip
+                  label="Clear All Filters"
+                  color="primary"
+                  variant="filled"
+                  sx={{ fontSize: 15, m: 0.5, height: 20, fontWeight: 600 }}
+                  onClick={() => {
+                    setActiveFilterLabels([]);
+                    onClearFilters();
+                    setIsHeaderSortActive(false);
+                    setIsFilterSidebarActive(false);
+                    setSearchKeyword("");
+                    setIsSearchFilterActive(false);
+                    setFilteredRows([]);
+                  }}
+                />
+              ) : (
+                ""
+              )}
             </Grid>
           </Grid>
           <Grid
@@ -656,10 +647,12 @@ export default function CoursesTable({
                 row={row.data}
                 isAdded={checkIsCourseAdded(
                   row.data.courseNum,
-                  row.data.section
+                  row.data.section,
+                  row.courseSemesterOffered
                 )}
                 labInfo={row.lab}
                 moreInfo={row.moreInfo}
+                semester={row.courseSemesterOffered}
                 selectedCourses={selectedCourses}
                 scheduledCourses={scheduledCourses}
                 handleAdd={() => {
@@ -706,35 +699,36 @@ export default function CoursesTable({
         ) : (
           ""
         )}
-        <Box sx={{ width: "100%" }}>
-          <Grid container sx={{ width: "100%" }}>
-            <Grid item xs={7} />
-            <Grid item xs={5}>
-              <TablePagination
-                rowsPerPageOptions={[
-                  5,
-                  10,
-                  15,
-                  20,
-                  25,
-                  { label: "All", value: -1 },
-                ]}
-                colSpan={3}
-                count={courses.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: {
-                    "aria-label": "rows per page",
-                  },
-                  native: true,
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={CoursesTablePaginationActions}
-              />
-            </Grid>
-          </Grid>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: isSmallScreen ? "flex-start" : "flex-end",
+          }}
+        >
+          <TablePagination
+            rowsPerPageOptions={[
+              5,
+              10,
+              15,
+              20,
+              25,
+              { label: "All", value: -1 },
+            ]}
+            colSpan={3}
+            count={isFilterActive ? totalFilterResultCount : totalCourses}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            SelectProps={{
+              inputProps: {
+                "aria-label": "rows per page",
+              },
+              native: true,
+            }}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            ActionsComponent={CoursesTablePaginationActions}
+          />
         </Box>
       </TableContainer>
     </Box>

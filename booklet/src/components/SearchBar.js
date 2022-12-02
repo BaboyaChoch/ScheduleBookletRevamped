@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
-import { getAllCoursesRequest } from "../lib/CoursesAPI";
+import getAllCoursesRequest from "../lib/CoursesAPI";
 const useStyles = makeStyles({
   content: {
     display: "flex",
@@ -27,6 +27,7 @@ export default function Search({
   courses,
   setCourses,
   setShowResults,
+  setShowLoading,
 }) {
   const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
@@ -97,10 +98,11 @@ export default function Search({
 
     end = end.split("");
     end.splice(2, 0, ":");
-
-    return `${start.join("")}${startTimePostFix}-${end.join(
+    const result = `${start.join("")}${startTimePostFix}-${end.join(
       ""
     )}${endTimePostFix}`;
+
+    return result;
   };
 
   const courseNumberDescendingComparator = (a, b) => {
@@ -116,18 +118,41 @@ export default function Search({
     return 0;
   };
 
+  // we will simulate wait-lists by randomly assigning a wait-list count to some full courses every 5 full courses
+  let FULl_COURSES_COUNT = 0;
+  const handleFullCourse = (avl) => {
+    if (avl !== "(F)") {
+      return parseInt(avl);
+    }
+
+    FULl_COURSES_COUNT += 1;
+    if (FULl_COURSES_COUNT % 5 == 0) {
+      return Math.floor(-1 * Math.random() * 10);
+    }
+
+    return 0;
+  };
+
+  const parseCredits = (credits) => {
+    if (credits.includes("-")) {
+      return credits.replaceAll('"', "");
+    } else {
+      return parseInt(credits.replaceAll('"', ""));
+    }
+  };
   const structureCoursesData = (coursesList) => {
     const newCoursesList = [];
+
     for (const course of coursesList) {
       newCoursesList.push({
         data: {
-          availability: course.availability,
+          availability: handleFullCourse(course.availability),
           enrollment: course.enrollment,
           courseNum: course.coursenum,
           courseName: course.coursename,
           type: course.type,
           section: course.section,
-          credits: course.credits,
+          credits: parseCredits(course.credits),
           time: getTime(course.time),
           days: course.days,
           building: course.building,
@@ -148,8 +173,10 @@ export default function Search({
           desc: course.description,
           specialEnrollment: course.specialenrollment,
         },
+        courseSemesterOffered: semesterValue,
       });
     }
+
     // show courses in descending order by default
     return newCoursesList.sort((a, b) =>
       courseNumberDescendingComparator(a, b)
@@ -159,7 +186,8 @@ export default function Search({
   const handleSearchCourses = () => {
     if (semesterValue && departmentValue) {
       setShowErrorHelperMessage(false);
-
+      setShowResults(true);
+      setShowLoading(true);
       const semesterDepartment =
         SEMESTER_DEPARTMENT_TO_API_ENDPOINT_MAP[
           `${semesterValue} ${departmentValue}`
@@ -167,7 +195,7 @@ export default function Search({
 
       getAllCoursesRequest(semesterDepartment).then((response) => {
         setCourses(structureCoursesData(response));
-        setShowResults(true);
+        setShowLoading(false);
         // show courses;
       });
     } else {
