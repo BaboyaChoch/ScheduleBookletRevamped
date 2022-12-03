@@ -1,7 +1,6 @@
 import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import TableRow from "@mui/material/TableRow";
-import * as React from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Box from "@mui/material/Box";
 import TableHead from "@mui/material/TableHead";
@@ -97,7 +96,7 @@ export default function MiniCoursesTable({
                         <TableCell key={index} className={classes.tableCells}>
                           <Typography
                             textAlign="center"
-                            sx={{ fontSize: 9, fontWeight: "500" }}
+                            sx={{ fontSize: 12, fontWeight: "500" }}
                           >
                             {cell}
                           </Typography>
@@ -130,7 +129,7 @@ export default function MiniCoursesTable({
                         <TableCell key={index} className={classes.tableCells}>
                           <Typography
                             textAlign="center"
-                            sx={{ fontSize: 9, fontWeight: "500" }}
+                            sx={{ fontSize: 12, fontWeight: "500" }}
                           >
                             {cell}
                           </Typography>

@@ -4,7 +4,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
-  Box,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -61,6 +60,7 @@ export default function SearchModel({
           selectedCourses[i][0] == courseNum &&
           selectedCourses[i][1] == courseSection
         ) {
+          console.log("REMOVED", selectedCourses[i][0], selectedCourses[i][1]);
           selectedCourses.splice(i, 1);
           setSelectedCourses(selectedCourses);
           setRandTableKey(Math.random());
@@ -72,13 +72,6 @@ export default function SearchModel({
   };
 
   const compareTime = (a, b) => {
-    // console.log(
-    //   "COMPARING: ",
-    //   [a.format("YYYY-DD-MM hh:mm A"), b.format("YYYY-DD-MM hh:mm A")],
-    //   [a.isBefore(b), a.isAfter(b)]
-    // );
-    // console.log("=======================================");
-
     if (a.isAfter(b)) return 1;
 
     if (b.isAfter(a)) return -1;
