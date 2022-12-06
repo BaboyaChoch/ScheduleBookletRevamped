@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Divider, Grid, useTheme, Container, Skeleton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
@@ -25,38 +25,20 @@ const useStyles = makeStyles({
 
 export default function App() {
   const classes = useStyles();
-  const theme = useTheme();
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [filters, setFilters] = useState(null);
   const [semesterYearKeyWord, setSemesterYearKeyword] = useState(null);
   const [departmentKeyWord, setDepartmentKeyword] = useState(null);
   const [handleClearAllFilters, setHandleClearAllFilters] = useState(() => {});
   const [scheduledCourses, setScheduledCourses] = useState([
-    ["CSC 1350", 2, "1.0", "9:30AM-10:20AM", "M W F"],
-    ["CSC 1253", 1, "3.0", "12:00PM-1:20PM", "T TH"],
-    ["CSC 1240", 1, "3.0", "11:30AM-12:30PM", "M W "],
+    ["CSC 1350", 2, "1", "9:30AM-10:20AM", "M W F"],
+    ["CSC 1253", 1, "3", "12:00PM-1:20PM", "T TH"],
+    ["CSC 1240", 1, "3", "11:30AM-12:30PM", "M W "],
   ]);
   const [courses, setCourses] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState([]);
-
-  useEffect(() => {
-    setIsDarkMode(theme.palette.mode == "dark");
-    // console.log(theme);
-  });
-
-  useEffect(() => {
-    // console.log(
-    //   `CURRENT_THEME_MODE: ${theme.palette.mode}`,
-    //   `IS_DARK_MODE: ${isDarkMode}`
-    // );
-    theme.palette.mode = isDarkMode ? "dark" : "light";
-  }, [isDarkMode]);
-
-  // for debugging purposes, feel free to comment out
-  useEffect(() => {}, [departmentKeyWord, semesterYearKeyWord]);
 
   return (
     <div className={classes.root}>

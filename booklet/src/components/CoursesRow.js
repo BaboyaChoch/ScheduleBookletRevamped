@@ -5,13 +5,14 @@ import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Button, Grid, Stack, useMediaQuery } from "@mui/material";
-import { makeStyles, useTheme } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import MiniCoursesTable from "./MiniCoursesTable";
 import AlertAddClassWithLabModal from "./AlertAddClassWithLabModal";
 import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Tooltip from "@mui/material/Tooltip";
 import DEFAULT_USER from "../config/user";
+import AlertUser from "./AlertUser";
 
 const useStyles = makeStyles({
   actionButtons: {
@@ -54,9 +55,9 @@ export default function CoursesRow({
   const [courseNotAddableReason, setCourseNotAddableReason] =
     useState(undefined);
   const [isNotAddable, setIsNotAddable] = useState(true);
+  const [openHoursExceededAlert, setOpenHoursExceededAlert] = useState(false);
 
   const classes = useStyles();
-  const theme = useTheme();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("xl"));
   const isMajorsOnly =
     moreInfo.isMajorsOnly === true ||
@@ -131,17 +132,38 @@ export default function CoursesRow({
 
   const handleAddLabNoticeModalClose = () => setOpenAddLabNoticeModal(false);
 
+  const getCreditHours = (credits) => {
+    if (credits.includes("-")) {
+      const [lowBound, highBound] = credits.split("-");
+
+      // assume low bound for ranged credits
+      return parseInt(lowBound);
+    } else {
+      return parseInt(credits);
+    }
+  };
+  const classAddExceedsCreditsLimit = () => {
+    let totalScheduledCredits = 0;
+    const addedCourses = [...scheduledCourses, ...selectedCourses];
+    for (let i = 0; i < addedCourses.length; i++) {
+      // credits hours at index 2
+      totalScheduledCredits += getCreditHours(addedCourses[i][2]);
+    }
+    return (
+      totalScheduledCredits + getCreditHours(row.credits) >
+      DEFAULT_USER.semesterCreditHoursLimit
+    );
+  };
+
   // Todo: In the else statement, call function to add course to schedule modal
   const handleOnAddClass = (isClickedFromModalOrMoreInfo = false) => {
     if (!isClickedFromModalOrMoreInfo && labInfo) handleAddLabNoticeModalOpen();
-    else {
-      if (checkIsCourseAdded(row.courseNum, row.section)) {
-        alert("Course Currently Already Part of Schedule");
-      } else {
-        handleAdd();
-        setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
-        setIsNotAddable(true);
-      }
+    else if (classAddExceedsCreditsLimit()) {
+      setOpenHoursExceededAlert(true);
+    } else {
+      handleAdd();
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
+      setIsNotAddable(true);
     }
   };
 
@@ -160,6 +182,10 @@ export default function CoursesRow({
     SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE:
       "The semester you are trying to schedule for is not available" +
       " or already passed",
+    CLASS_FUll: "This is class has reached its maxed capacity",
+    SIMILIAR_COURSE_DIFFERENT_SECTION_ADDED:
+      "You have already added and/or scheduled this course with a different" +
+      " section",
   };
 
   const getNotAddableToolTipIcon = () => {
@@ -168,7 +194,7 @@ export default function CoursesRow({
     else return <InfoIcon sx={{ fontSize: 15, color: "red" }} />;
   };
 
-  useEffect(() => {
+  const validateAndSetCourseAddable = () => {
     const courseDepartment = row.courseNum.split(" ")[0];
 
     if (isAdded) {
@@ -187,6 +213,9 @@ export default function CoursesRow({
         CLASS_NOT_ADDABLE_REASONS_MAP.SCHEDULING_FOR_SEMESTER_PASSED_OR_NOT_AVAILABLE
       );
       setIsNotAddable(true);
+    } else if (row.availability === 0) {
+      setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.CLASS_FUll);
+      setIsNotAddable(true);
     } else if (false) {
       // Todo: check if course is restricted by a res hall and check if the stundet's res hall is part of the list if it is
       setCourseNotAddableReason(
@@ -195,27 +224,39 @@ export default function CoursesRow({
       setIsNotAddable(true);
     } else {
       setIsNotAddable(false);
+      setCourseNotAddableReason(undefined);
     }
+  };
+
+  useEffect(() => {
+    validateAndSetCourseAddable();
   }, []);
 
   const checkIsCourseAdded = (num, section) => {
     const addedCourses = [...scheduledCourses, ...selectedCourses];
     for (let i = 0; i < addedCourses.length; i++) {
       if (addedCourses[i][0] == num && addedCourses[i][1] == section) {
-        return true;
+        return 1;
+      } else if (addedCourses[i][0] == num) {
+        return -1;
       }
     }
-    return false;
+    return 0;
   };
 
   useEffect(() => {
     window.addEventListener("onClassRemoved", () => {
-      if (checkIsCourseAdded(row.courseNum, row.section)) {
+      const checkIsAdded = checkIsCourseAdded(row.courseNum, row.section);
+      if (checkIsAdded === 1) {
         setCourseNotAddableReason(CLASS_NOT_ADDABLE_REASONS_MAP.ALREADY_ADDED);
         setIsNotAddable(true);
+      } else if (checkIsAdded === -1) {
+        setCourseNotAddableReason(
+          CLASS_NOT_ADDABLE_REASONS_MAP.SIMILIAR_COURSE_DIFFERENT_SECTION_ADDED
+        );
+        setIsNotAddable(true);
       } else {
-        setIsNotAddable(false);
-        setCourseNotAddableReason(undefined);
+        validateAndSetCourseAddable();
       }
     });
   }, []);
@@ -241,7 +282,7 @@ export default function CoursesRow({
                 {index === 0 ? (
                   getAvailabilityText(rowContent)
                 ) : (
-                  <Typography fontSize={11} fontWeight={500}>
+                  <Typography fontSize={12} fontWeight={500}>
                     {rowContent}
                   </Typography>
                 )}
@@ -493,6 +534,14 @@ export default function CoursesRow({
       ) : (
         ""
       )}
+      <AlertUser
+        open={openHoursExceededAlert}
+        onClose={() => setOpenHoursExceededAlert(false)}
+        message={`Unable to add course. Credits will exceed limit of ${DEFAULT_USER.semesterCreditHoursLimit}`}
+        titleLabel="Credit Limit"
+        acceptLabel="Ok"
+        onAccept={() => setOpenHoursExceededAlert(false)}
+      />
     </>
   );
 }

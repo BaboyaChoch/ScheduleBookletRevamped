@@ -137,7 +137,7 @@ export default function Search({
     if (credits.includes("-")) {
       return credits.replaceAll('"', "");
     } else {
-      return parseInt(credits.replaceAll('"', ""));
+      return credits.replaceAll('"', "");
     }
   };
   const structureCoursesData = (coursesList) => {
@@ -150,7 +150,12 @@ export default function Search({
           enrollment: course.enrollment,
           courseNum: course.coursenum,
           courseName: course.coursename,
-          type: course.type,
+          type:
+            course.type === "Lec"
+              ? course.lab !== null
+                ? "Lec & Lab"
+                : "Lec"
+              : course.type,
           section: course.section,
           credits: parseCredits(course.credits),
           time: getTime(course.time),
