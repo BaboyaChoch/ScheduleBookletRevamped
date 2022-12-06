@@ -21,7 +21,6 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
-
 export default function SearchModel({
   selectedCourses,
   setSelectedCourses,
@@ -165,7 +164,12 @@ export default function SearchModel({
 
   return (
     <>
-      <Accordion>
+      <Accordion
+        sx={{
+          borderTopLeftRadius: "10px !important",
+          borderTopRightRadius: "10px !important",
+        }}
+      >
         <AccordionSummary
           sx={{
             backgroundColor: "#674EA7",
